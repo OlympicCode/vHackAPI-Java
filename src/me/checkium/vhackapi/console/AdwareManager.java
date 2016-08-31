@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -61,6 +62,12 @@ public class AdwareManager {
 	
 	
 	public HashMap<String, Integer> getAdware() {
+		try {
+			TimeUnit.MILLISECONDS.sleep(100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		HashMap<String, Integer> map = new HashMap<>();
 		JSONObject json = Utils.JSONRequest("user::::pass", username + "::::" + password, "vh_adwareInfo.php");
 		if (json.getInt("remote") <= 0) {
