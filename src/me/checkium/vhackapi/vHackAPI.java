@@ -134,7 +134,7 @@ public class vHackAPI {
 			return "Spam";
 		case "bonus":
 			return "Packages";
-		case "rank":
+		case "elo":
 			return "Rank";
 		case "hash":
 			return "Hash";
