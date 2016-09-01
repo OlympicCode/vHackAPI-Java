@@ -1,5 +1,5 @@
 # vHackAPI-Java
-[![Gitter Chat](https://badges.gitter.im/owner/repo.png)](https://gitter.im/vHack-API/vHackAPI-Java)
+[![Gitter Chat](https://badges.gitter.im/owner/repo.png)](https://gitter.im/vHack-API/vHackAPI-Java) ![Build](https://travis-ci.org/vHack-API/vHackAPI-Python.svg?branch=master)
 
 Current feature list:
 - Ability to scan the network for IP addresses.
