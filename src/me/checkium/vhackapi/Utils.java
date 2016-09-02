@@ -11,15 +11,12 @@ import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.X509Certificate;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
 
 public class Utils {
 	public static String url;
@@ -47,12 +44,11 @@ public class Utils {
 
     public static JSONObject JSONRequest(String format, String data, String php){
    	 try {
-		    SSLContext sc = SSLContext.getInstance("SSL"); 
-		    sc.init(null, Utils.trustAllCerts, new java.security.SecureRandom()); 
+		    SSLContext sc = SSLContext.getInstance("SSL");
+		    sc.init(null, Utils.trustAllCerts, new java.security.SecureRandom());
 		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
 		} catch (GeneralSecurityException e) {
 		}
-   	 
 		JSONObject json = null;
 		InputStream is;
 		try {
@@ -63,14 +59,8 @@ public class Utils {
 				return null;
 		    }
 		    json = new JSONObject(jsonText);
-		    
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
-			
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+            e.printStackTrace();
 		}
 		return json;
 	}
@@ -171,21 +161,21 @@ public class Utils {
         throw new AssertionError();
     }
 
-    public static TrustManager[] trustAllCerts = new TrustManager[] { 
-    	    new X509TrustManager() {     
-    	        public java.security.cert.X509Certificate[] getAcceptedIssuers() { 
+    public static TrustManager[] trustAllCerts = new TrustManager[] {
+    	    new X509TrustManager() {
+    	        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
     	            return new X509Certificate[0];
-    	        } 
-    	        public void checkClientTrusted( 
+    	        }
+    	        public void checkClientTrusted(
     	            java.security.cert.X509Certificate[] certs, String authType) {
-    	            } 
-    	        public void checkServerTrusted( 
+    	            }
+    	        public void checkServerTrusted(
     	            java.security.cert.X509Certificate[] certs, String authType) {
     	        }
-    	    } 
-    	}; 
+    	    }
+    	};
 
-    
+
     public  static String generateURL(String str, String str2, String str3) {
         String[] strArr = new String[2];
         String[] split = str.split("::::");

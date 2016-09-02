@@ -8,9 +8,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import me.checkium.vhackapi.Utils;
@@ -64,36 +66,33 @@ public class Console {
 		return result;
 	}
 
-	
-	
-	public ArrayList<ScanResult> scanIPs(ArrayList<String> ips){
-		InputStream is;
-		BufferedReader rd;
-		ArrayList<ScanResult> array = new ArrayList<ScanResult>();
-		ScanResult result;
-		try {
-			for (int j = 0; j < ips.size(); j++) {
-		
-				is = new URL(Utils.generateURL("user::::pass::::target",username + "::::" + password + "::::" + ips.get(j), "vh_scan.php")).openStream();
-				rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-			    result = new ScanResult(ReadBigStringIn(rd));
-			    array.add(result);
-		    	try {
-					TimeUnit.MILLISECONDS.sleep(100);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}	
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return array;
-	}
-	
-	
+    public List<ScannedNode> scanIPs(List<String> ips) {
+        InputStream is;
+        BufferedReader rd;
+        List<ScannedNode> array = new ArrayList<>();
+        ScannedNode result;
+
+        for (String ip : ips) {
+            try{
+                is = new URL(Utils.generateURL("user::::pass::::target", username + "::::" + password + "::::" + ip, "vh_scan.php")).openStream();
+                rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+                String[] temp = ReadBigStringIn(rd);
+                result = new ScannedNode(temp);
+                result.setIP(ip);
+                array.add(result);
+                TimeUnit.MILLISECONDS.sleep(100);
+            } catch (InterruptedException|IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        return array;
+    }
+
+    public TransferResult transferTrojanTo(ScannedNode node) throws JSONException {
+        JSONObject json = Utils.JSONRequest("user::::pass::::target", username + "::::" + password + "::::" + node.getIP(), "vh_trTransfer.php");
+        return new TransferResult(json, node.getIP());
+    }
 
 	
 	public ArrayList<TransferResult> trTransferIPs(ArrayList<String> ips) {
