@@ -22,59 +22,54 @@ public class vHackAPI {
 	protected String password;
 	protected String username;
 
-
+	
 	 public Console getConsole() {
 		 Console console = new Console(username, password);
 		 return console;
 	 }
-
+	 
 	 public UpgradeManager getUpgradeManager() {
 		 UpgradeManager manager = new UpgradeManager(username, password);
 		 return manager;
 	 }
-
+	 
 		public AdwareManager getAdwareManager() {
 			AdwareManager manager = new AdwareManager(password, username);
 			return manager;
 		}
-
+		
 
 	public String getStats(Stats stat) {
-
 		try {
 			TimeUnit.MILLISECONDS.sleep(200);
 		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		JSONObject json = null;
-
-		InputStream is;
-		try {
-			is = new URL(Utils.generateURL("user::::pass", username + "::::" + password, "vh_update.php")).openStream();
-			BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-			String jsonText = Utils.readJson(rd);
-			json = new JSONObject(jsonText);
-			if (json.getString(stat.toString()) == null) {
-				return null;
+        InputStream is;
+			try {
+				is = new URL(Utils.generateURL("user::::pass", username + "::::" + password, "vh_update.php")).openStream();
+				BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+				String jsonText = Utils.readJson(rd);
+				json = new JSONObject(jsonText);
+				if (json.getString(stat.toString()) == null) {
+					return null;
+				}
+			}  catch (IOException e) {
+				e.printStackTrace();
 			}
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return json.getString(stat.toString());
 	}
-
+	
 	public Others getOthers() {
 		Others others = new Others(username, password);
 		return others;
 	}
-
+	
 	public String getUsername(){
 		return username;
 	}
-
+	
 	public String getPassword(){
 		return password;
 	}
@@ -91,9 +86,9 @@ public class vHackAPI {
 	public vHackAPI getAPI() {
 		return this;
 	}
-
-
-
+	
+	
+	
 	public String humanizeString(String unumanized) {
 		switch (unumanized) {
 		case "fw":
@@ -138,5 +133,5 @@ public class vHackAPI {
 	    	return null;
 		}
 	}
-
+	
 }
