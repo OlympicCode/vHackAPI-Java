@@ -54,7 +54,7 @@ public class vHackAPI {
 				is = new URL(Utils.generateURL("user::::pass", username + "::::" + password, "vh_update.php")).openStream();
 				BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
 				String jsonText = Utils.readJson(rd);
-			
+				
 			    json = new JSONObject(jsonText);
 			    
 			} catch (MalformedURLException e) {

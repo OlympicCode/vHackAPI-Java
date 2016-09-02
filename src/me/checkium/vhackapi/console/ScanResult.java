@@ -30,7 +30,7 @@ public class ScanResult {
 		anonymous = result[9].substring(27);
 		repsuccess = result[11].substring(32);
 		repfail = result[12].substring(29);
-		successrate = result[13].substring(39);
+		successrate = result[13].substring(39).replace("%", "");
 		}
 	}
 	
@@ -65,17 +65,9 @@ public class ScanResult {
 		return "";
 	}
 	
-	public int getMoney(){
-		return 0;
-	}
+
 	
-	public int getReputation(){
-		return 0;
-	}
-	
-	public int getSucess(){
-		return 0;
-	}
+
 	
 	public String getUsername() {
 		if (!success) { return null; }
@@ -84,6 +76,7 @@ public class ScanResult {
 	
 	public String getRepOnSuccess() {
 		if (!success) { return null; }
+		
 		return repsuccess;
 	}
 	
@@ -95,7 +88,8 @@ public class ScanResult {
 	public boolean anonymous() {
 		if (!success) { return false; }
 		boolean anony;
-		if (anonymous == "YES") {
+	
+		if (anonymous.contains("YES")) {
 			anony = true;
 		} else {
 			anony = false;
@@ -103,10 +97,17 @@ public class ScanResult {
 		return anony;
 	}
 	
+	public int getMoney() {
+		if (!success) { return 0; }
+		if (money.contains("?")) {
+			money = "0";
+		}
+		return Integer.valueOf(money);
+	}
 	public int getSuccessRate() {
 		if (!success) { return 0; }
-		if (successrate == "???") {
-			return 0;
+		if (successrate.contains("?")) {
+			successrate = "0";
 		}
 		return Integer.valueOf(successrate);
 		

@@ -8,8 +8,15 @@ import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +30,7 @@ public class Utils {
 
     static {
         assertionstatus = !Utils.class.desiredAssertionStatus();
-        url = "http://vhackxt.com/v/9/";
+        url = "https://vhackxt.com/v/9/";
         md5s = "MD5";
         secret = "aeffl";
         byt = new byte[]{(byte) 65, (byte) 66, (byte) 67, (byte) 68, (byte) 69, (byte) 70, (byte) 71, (byte) 72, (byte) 73, (byte) 74, (byte) 75, (byte) 76, (byte) 77, (byte) 78, (byte) 79, (byte) 80, (byte) 81, (byte) 82, (byte) 83, (byte) 84, (byte) 85, (byte) 86, (byte) 87, (byte) 88, (byte) 89, (byte) 90, (byte) 97, (byte) 98, (byte) 99, (byte) 100, (byte) 101, (byte) 102, (byte) 103, (byte) 104, (byte) 105, (byte) 106, (byte) 107, (byte) 108, (byte) 109, (byte) 110, (byte) 111, (byte) 112, (byte) 113, (byte) 114, (byte) 115, (byte) 116, (byte) 117, (byte) 118, (byte) 119, (byte) 120, (byte) 121, (byte) 122, (byte) 48, (byte) 49, (byte) 50, (byte) 51, (byte) 52, (byte) 53, (byte) 54, (byte) 55, (byte) 56, (byte) 57, (byte) 45, (byte) 95};
@@ -39,6 +46,13 @@ public class Utils {
       }
 
     public static JSONObject JSONRequest(String format, String data, String php){
+   	 try {
+		    SSLContext sc = SSLContext.getInstance("SSL"); 
+		    sc.init(null, Utils.trustAllCerts, new java.security.SecureRandom()); 
+		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+		} catch (GeneralSecurityException e) {
+		}
+   	 
 		JSONObject json = null;
 		InputStream is;
 		try {
@@ -157,7 +171,21 @@ public class Utils {
         throw new AssertionError();
     }
 
+    public static TrustManager[] trustAllCerts = new TrustManager[] { 
+    	    new X509TrustManager() {     
+    	        public java.security.cert.X509Certificate[] getAcceptedIssuers() { 
+    	            return new X509Certificate[0];
+    	        } 
+    	        public void checkClientTrusted( 
+    	            java.security.cert.X509Certificate[] certs, String authType) {
+    	            } 
+    	        public void checkServerTrusted( 
+    	            java.security.cert.X509Certificate[] certs, String authType) {
+    	        }
+    	    } 
+    	}; 
 
+    
     public  static String generateURL(String str, String str2, String str3) {
         String[] strArr = new String[2];
         String[] split = str.split("::::");

@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -77,7 +78,12 @@ public class Console {
 				rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
 			    result = new ScanResult(ReadBigStringIn(rd));
 			    array.add(result);
-				
+		    	try {
+					TimeUnit.MILLISECONDS.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}	
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
