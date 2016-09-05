@@ -1,9 +1,5 @@
 package me.checkium.vhackapi.console;
 
-import me.checkium.vhackapi.Utils;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,6 +7,11 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import me.checkium.vhackapi.Utils;
 
 public class AdwareManager {
 
@@ -39,7 +40,7 @@ public class AdwareManager {
     }
 
     public boolean removeAdware(String target) {
-        @SuppressWarnings("unused")
+        
         URLConnection in;
         try {
             in = new URL(Utils.generateURL("user::::pass::::target", username + "::::" + password + "::::" + target, "vh_removeAdwareRemote.php")).openConnection();
