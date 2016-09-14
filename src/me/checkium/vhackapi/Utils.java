@@ -7,13 +7,10 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -45,12 +42,14 @@ public class Utils {
       }
 
     public static JSONObject JSONRequest(String format, String data, String php){
-   	 try {
+    	System.setProperty("http.agent", "Chrome");
+   /*	 try {
 		    SSLContext sc = SSLContext.getInstance("SSL");
 		    sc.init(null, Utils.trustAllCerts, new java.security.SecureRandom());
 		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
 		} catch (GeneralSecurityException e) {
 		}
+		*/
 		JSONObject json = null;
 		InputStream is;
 		try {
