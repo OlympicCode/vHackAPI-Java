@@ -24,6 +24,7 @@ public class vHackAPIBuilder {
 	 }
 	 
 	 public vHackAPIBuilder register() {
+		
 		 JSONObject json = Utils.JSONRequest("user::::pass::::email", username + "::::" + password + "::::" + email, "vh_register.php");
 		 
 		 if (json.getString("result") != "0") {
@@ -32,6 +33,9 @@ public class vHackAPIBuilder {
 		 return this;
 		 }
 	 }
+	 
+	
+	 
 	 public vHackAPI getAPI() {
 		
 		 vHackAPI api = new vHackAPI(username, password);
