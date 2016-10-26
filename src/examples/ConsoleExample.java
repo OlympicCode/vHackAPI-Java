@@ -1,3 +1,12 @@
+
+
+
+
+
+
+
+
+
 package examples;
 
 import java.util.ArrayList;
@@ -9,8 +18,8 @@ import me.checkium.vhackapi.console.ScannedNode;
 import me.checkium.vhackapi.console.TransferResult;
 
 public class ConsoleExample {
-	public void hackExample(){
-		   vHackAPI api = new vHackAPIBuilder().password("pass").username("user").getAPI();
+	public static void main(String[] args) {
+		 vHackAPI api = new vHackAPIBuilder().password("pass").username("user").getAPI();
 		   List<String> ip = api.getConsole().getIPs(1, false, false);
 		   List<ScannedNode> scanned = api.getConsole().scanIPs(ip);
 		   
@@ -28,7 +37,6 @@ public class ConsoleExample {
 			   }
 			   
 		   }
-		   
-		   
+		
 	}
 }
