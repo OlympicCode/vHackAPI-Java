@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 package examples;
 
 import java.util.ArrayList;
