@@ -29,7 +29,7 @@ public class Utils {
 
     static {
         assertionstatus = !Utils.class.desiredAssertionStatus();
-        url = "https://vhackxt.com/v/1/";
+        url = "https://api.vhack.cc/v/7/";
         md5s = "MD5";
         secret = "aeffl";
         byt = new byte[]{(byte) 65, (byte) 66, (byte) 67, (byte) 68, (byte) 69, (byte) 70, (byte) 71, (byte) 72, (byte) 73, (byte) 74, (byte) 75, (byte) 76, (byte) 77, (byte) 78, (byte) 79, (byte) 80, (byte) 81, (byte) 82, (byte) 83, (byte) 84, (byte) 85, (byte) 86, (byte) 87, (byte) 88, (byte) 89, (byte) 90, (byte) 97, (byte) 98, (byte) 99, (byte) 100, (byte) 101, (byte) 102, (byte) 103, (byte) 104, (byte) 105, (byte) 106, (byte) 107, (byte) 108, (byte) 109, (byte) 110, (byte) 111, (byte) 112, (byte) 113, (byte) 114, (byte) 115, (byte) 116, (byte) 117, (byte) 118, (byte) 119, (byte) 120, (byte) 121, (byte) 122, (byte) 48, (byte) 49, (byte) 50, (byte) 51, (byte) 52, (byte) 53, (byte) 54, (byte) 55, (byte) 56, (byte) 57, (byte) 45, (byte) 95};
@@ -68,35 +68,42 @@ public class Utils {
 		}
 		return json;
 	}
-    
-    private static byte[] m9179a(byte[] bArr, int i, int i2, byte[] bArr2, int i3, byte[] bArr3) {
-        int i4 = 0;
-        int i5 = (i2 > 1 ? (bArr[i + 1] << 24) >>> 16 : 0) | (i2 > 0 ? (bArr[i] << 24) >>> 8 : 0);
-        if (i2 > 2) {
-            i4 = (bArr[i + 2] << 24) >>> 24;
+
+	//I sometimes get "Request Failed"
+    private static byte[] m9179a(byte[] arrby, int n2, int n3, byte[] arrby2, int n4, byte[] arrby3) {
+        int n5 = n3 > 0 ? arrby[n2] << 24 >>> 8 : 0;
+        int n6 = n3 > 1 ? arrby[n2 + 1] << 24 >>> 16 : 0;
+        int n7 = n6 | n5;
+        int n8 = 0;
+        if (n3 > 2) {
+            n8 = arrby[n2 + 2] << 24 >>> 24;
         }
-        i4 |= i5;
-        switch (i2) {
+        int n9 = n8 | n7;
+        switch (n3) {
+            default: {
+                return arrby2;
+            }
+            case 3: {
+                arrby2[n4] = arrby3[n9 >>> 18];
+                arrby2[n4 + 1] = arrby3[63 & n9 >>> 12];
+                arrby2[n4 + 2] = arrby3[63 & n9 >>> 6];
+                arrby2[n4 + 3] = arrby3[n9 & 63];
+                return arrby2;
+            }
+            case 2: {
+                arrby2[n4] = arrby3[n9 >>> 18];
+                arrby2[n4 + 1] = arrby3[63 & n9 >>> 12];
+                arrby2[n4 + 2] = arrby3[63 & n9 >>> 6];
+                arrby2[n4 + 3] = 61;
+                return arrby2;
+            }
             case 1:
-                bArr2[i3] = bArr3[i4 >>> 18];
-                bArr2[i3 + 1] = bArr3[(i4 >>> 12) & 63];
-                bArr2[i3 + 2] = (byte) 61;
-                bArr2[i3 + 3] = (byte) 61;
-                break;
-            case 2:
-                bArr2[i3] = bArr3[i4 >>> 18];
-                bArr2[i3 + 1] = bArr3[(i4 >>> 12) & 63];
-                bArr2[i3 + 2] = bArr3[(i4 >>> 6) & 63];
-                bArr2[i3 + 3] = (byte) 61;
-                break;
-            case 3:
-                bArr2[i3] = bArr3[i4 >>> 18];
-                bArr2[i3 + 1] = bArr3[(i4 >>> 12) & 63];
-                bArr2[i3 + 2] = bArr3[(i4 >>> 6) & 63];
-                bArr2[i3 + 3] = bArr3[i4 & 63];
-                break;
         }
-        return bArr2;
+        arrby2[n4] = arrby3[n9 >>> 18];
+        arrby2[n4 + 1] = arrby3[63 & n9 >>> 12];
+        arrby2[n4 + 2] = 61;
+        arrby2[n4 + 3] = 61;
+        return arrby2;
     }
 
     public static String generateUser(byte[] bArr, int i, int i2, byte[] bArr2, boolean z) {
@@ -108,7 +115,7 @@ public class Utils {
         return new String(a, 0, length);
     }
 
-    public static final String encryptString(String str) {
+    public static final String hashString(String str) {
         try {
             MessageDigest instance = MessageDigest.getInstance(md5s);
             instance.update(str.getBytes());
@@ -181,11 +188,9 @@ public class Utils {
 
 
     public  static String generateURL(String str, String str2, String str3) {
-        String[] strArr = new String[2];
         String[] split = str.split("::::");
         String[] split2 = str2.split("::::");
         long currentTimeMillis = System.currentTimeMillis() / 1000;
-        String str4 = "{";
         JSONObject jSONObject = new JSONObject();
         for (int i = 0; i < split.length; i++) {
             try {
@@ -199,21 +204,20 @@ public class Utils {
         } catch (JSONException e2) {
             e2.printStackTrace();
         }
-        str4 = jSONObject.toString();
-        byte[] bytes = str4.getBytes();
-        String a = generateUser(bytes, 0, bytes.length, byt, false);
-        String a2 = encryptString(str4.length() + encryptString(currentTimeMillis + ""));
-        String str5 = split2[0] + "" + encryptString(encryptString(split2[1]));
-        str4 = encryptString(currentTimeMillis + "" + str4);
+        String jsonString = jSONObject.toString();
+        byte[] jsonStringBytes = jsonString.getBytes();
+        String a = generateUser(jsonStringBytes, 0, jsonStringBytes.length, byt, false);
+        String a2 = hashString(jsonString.length() + hashString(currentTimeMillis + ""));
+        String str5 = split2[0] + "" + hashString(hashString(split2[1]));
+        String str6 = hashString(currentTimeMillis + "" + jsonString);
         byte[] bytes2 = a2.getBytes();
         byte[] bytes3 = str5.getBytes();
-        byte[] bytes4 = str4.getBytes();
-        a2 = encryptString(secret + encryptString(encryptString(generateUser(bytes2, 0, bytes2.length, byt, false))));
-        str5 = generateUser(bytes3, 0, bytes3.length, byt, false);
-        str4 = encryptString(encryptString(a2 + encryptString(encryptString(str5) + generateUser(bytes4, 0, bytes4.length, byt, false))));
-        strArr[0] = a;
-        strArr[1] = str4;
-        return url + str3 + "?user=" + a + "&pass=" + str4;
+        byte[] bytes4 = str6.getBytes();
+        String a3 = hashString(secret + hashString(hashString(generateUser(bytes2, 0, bytes2.length, byt, false))));
+        String str6 = generateUser(bytes3, 0, bytes3.length, byt, false);
+        String str7 = generateUser(bytes4, 0, bytes4.length, byt, false);
+        String str8 = hashString(hashString(a3 + hashString(hashString(str6) + str7)));
+        return url + str3 + "?user=" + a + "&pass=" + str8;
     }
 
 }
