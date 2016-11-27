@@ -20,10 +20,12 @@ public class UpgradeManager {
 
 	protected String username;
 	protected String password;
+	protected String userHash;
 	
-	public UpgradeManager(String user, String pass) {
+	public UpgradeManager(String user, String pass, String uhash) {
 		username = user;
 		password = pass;
+		userHash = uhash;
 	}
 	
 	public UpgradeResult addUpdate(UpgradeType type) {
@@ -31,7 +33,7 @@ public class UpgradeManager {
 		JSONObject json = new JSONObject();
 		try {
 	    TimeUnit.MILLISECONDS.sleep(100);
-		InputStream is = new URL(Utils.generateURL("user::::pass::::utype", username + "::::" + password + "::::" + type.toString(), "vh_addUpdate.php")).openStream();
+		InputStream is = new URL(Utils.generateURL("user::::pass::::uhash::::utype", username + "::::" + password + "::::" + userHash + "::::" + type.toString(), "vh_addUpdate.php")).openStream();
 		BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
 		String jsonText;
 		
@@ -62,7 +64,7 @@ public class UpgradeManager {
 		JSONObject json = new JSONObject();
 		try {
 	    TimeUnit.MILLISECONDS.sleep(100);
-		InputStream is = new URL(Utils.generateURL("user::::pass", username + "::::" + password, "vh_tasks.php")).openStream();
+		InputStream is = new URL(Utils.generateURL("user::::pass::::uhash", username + "::::" + password + "::::" + userHash, "vh_tasks.php")).openStream();
 		BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
 		String jsonText;
 		
@@ -95,7 +97,7 @@ public class UpgradeManager {
 		URLConnection in;
 		try {
 			TimeUnit.MILLISECONDS.sleep(100);
-			in = new URL(Utils.generateURL("user::::pass::::taskid", username + "::::" + password + "::::" + task.getTaskID(), "vh_finishTask.php")).openConnection();
+			in = new URL(Utils.generateURL("user::::pass::::uhash::::taskid", username + "::::" + password + "::::" + userHash + "::::" + task.getTaskID(), "vh_finishTask.php")).openConnection();
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader((in.getInputStream())));
 		String line = br.readLine();
@@ -125,7 +127,7 @@ public class UpgradeManager {
 		URLConnection in;
 		try {
 			TimeUnit.MILLISECONDS.sleep(100);
-			in = new URL(Utils.generateURL("user::::pass::::taskid", username + "::::" + password + "::::" + task.getTaskID(), "vh_abortTask.php")).openConnection();
+			in = new URL(Utils.generateURL("user::::pass::::uhash::::taskid", username + "::::" + password + "::::" + userHash + "::::" + task.getTaskID(), "vh_abortTask.php")).openConnection();
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader((in.getInputStream())));
 		String line = br.readLine();

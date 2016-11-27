@@ -19,14 +19,7 @@ public class ConsoleExample {
 			   if(transfer.get(0).getSuccess()){
 				   System.out.println("Got $" + transfer.get(0).getMoneyAmount());
 				   System.out.println("Gained " + transfer.get(0).getRepGained() + " rep.");
-			   }
-			   if(api.getAdwareManager().uploadAdware(ip.get(0))){
-				   System.out.println("Adware uploaded successfully.");
-			   }
-			   else{
-				   System.out.println("Failed to upload Adware.");
-			   }
-			   
+			   }			   
 		   }
 		
 	}

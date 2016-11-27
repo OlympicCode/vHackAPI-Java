@@ -214,9 +214,9 @@ public class Utils {
         byte[] bytes3 = str5.getBytes();
         byte[] bytes4 = str6.getBytes();
         String a3 = hashString(secret + hashString(hashString(generateUser(bytes2, 0, bytes2.length, byt, false))));
-        String str6 = generateUser(bytes3, 0, bytes3.length, byt, false);
+        String str9 = generateUser(bytes3, 0, bytes3.length, byt, false);
         String str7 = generateUser(bytes4, 0, bytes4.length, byt, false);
-        String str8 = hashString(hashString(a3 + hashString(hashString(str6) + str7)));
+        String str8 = hashString(hashString(a3 + hashString(hashString(str9) + str7)));
         return url + str3 + "?user=" + a + "&pass=" + str8;
     }
 
