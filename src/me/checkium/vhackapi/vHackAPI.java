@@ -70,10 +70,10 @@ public class vHackAPI {
 		Chat chat = new Chat();
 				return chat;
 	}
-	public vHackAPI(String user, String pass, String uhash) {
+	public vHackAPI(String user, String pass) {
 		username = user;
 		password = pass;
-		userHash = uhash;
+		userHash = getStats(Stats.uhash);
 		//return this;
 	}
 	
