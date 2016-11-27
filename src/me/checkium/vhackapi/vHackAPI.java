@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 import org.json.JSONObject;
 
 import me.checkium.vhackapi.chat.Chat;
-import me.checkium.vhackapi.console.AdwareManager;
 import me.checkium.vhackapi.console.Console;
 import me.checkium.vhackapi.others.Others;
 import me.checkium.vhackapi.upgrades.UpgradeManager;
@@ -20,23 +19,18 @@ public class vHackAPI {
 
 	protected String password;
 	protected String username;
+	protected String userHash;
 
 	
 	 public Console getConsole() {
-		 Console console = new Console(username, password);
+		 Console console = new Console(username, password, userHash);
 		 return console;
 	 }
 	 
 	 public UpgradeManager getUpgradeManager() {
-		 UpgradeManager manager = new UpgradeManager(username, password);
+		 UpgradeManager manager = new UpgradeManager(username, password, userHash);
 		 return manager;
-	 }
-	 
-		public AdwareManager getAdwareManager() {
-			AdwareManager manager = new AdwareManager(password, username);
-			return manager;
-		}
-		
+	 }		
 
 	public String getStats(Stats stat) {
 		try {
@@ -47,7 +41,7 @@ public class vHackAPI {
 		JSONObject json = null;
         InputStream is;
 			try {
-				is = new URL(Utils.generateURL("user::::pass", username + "::::" + password, "vh_update.php")).openStream();
+				is = new URL(Utils.generateURL("user::::pass::::uhash", username + "::::" + password + "::::" + userHash, "vh_update.php")).openStream();
 				BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
 				String jsonText = Utils.readJson(rd);
 				json = new JSONObject(jsonText);
@@ -61,7 +55,7 @@ public class vHackAPI {
 	}
 	
 	public Others getOthers() {
-		Others others = new Others(username, password);
+		Others others = new Others(username, password, userHash);
 		return others;
 	}
 	
@@ -79,8 +73,10 @@ public class vHackAPI {
 	public vHackAPI(String user, String pass) {
 		username = user;
 		password = pass;
+		userHash = getStats(Stats.uhash);
 		//return this;
 	}
+	
 	@Deprecated
 	public vHackAPI getAPI() {
 		return this;
