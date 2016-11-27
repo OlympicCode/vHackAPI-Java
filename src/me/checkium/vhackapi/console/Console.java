@@ -20,10 +20,12 @@ public class Console {
 
 	protected String password;
 	protected String username;
+	protected String userHash;
 	
-	public Console(String user, String pass) {
+	public Console(String user, String pass, String uHash) {
 		username = user;
 		password = pass;
+		userHash = uHash;
 		//return this;
 	}
 	
@@ -44,7 +46,7 @@ public class Console {
 		}
 		if (number > 10) {
 			for (int i = 10; i <= number + 9; i = i + 10) {
-				JSONObject json = Utils.JSONRequest("user::::pass::::global", username + "::::" + password + "::::" + Integer.toString(globali), "vh_network.php");
+				JSONObject json = Utils.JSONRequest("user::::pass::::uhash::::global", username + "::::" + password + "::::" + userHash + "::::" + Integer.toString(globali), "vh_network.php");
 				JSONArray jSONArray = json.getJSONArray("data");
 				for (int j = 0; j <= jSONArray.length() - 1; j++) {
 					JSONObject ip = jSONArray.getJSONObject(j);
@@ -56,7 +58,7 @@ public class Console {
 				result.add(temporary.get(k));
 			}
 		} else {
-			JSONObject json = Utils.JSONRequest("user::::pass::::global", username + "::::" + password + "::::" + Integer.toString(globali), "vh_network.php");
+			JSONObject json = Utils.JSONRequest("user::::pass::::uhash::::global", username + "::::" + password + "::::" + userHash + "::::" + Integer.toString(globali), "vh_network.php");
 			JSONArray jSONArray = json.getJSONArray("data");
 			for (int k = 0; k < number; k++) {
 				result.add(jSONArray.getJSONObject(k).getString("ip"));
@@ -89,7 +91,7 @@ public class Console {
     }
 
     public TransferResult transferTrojanTo(ScannedNode node) throws JSONException {
-        JSONObject json = Utils.JSONRequest("user::::pass::::target", username + "::::" + password + "::::" + node.getIP(), "vh_trTransfer.php");
+        JSONObject json = Utils.JSONRequest("user::::pass::::uhash::::target", username + "::::" + password + "::::" + userHash + "::::" + node.getIP(), "vh_trTransfer.php");
         return new TransferResult(json, node.getIP());
     }
 
@@ -99,7 +101,7 @@ public class Console {
 		TransferResult result;
 		for (int j = 0; j < ips.size(); j++) {
 
-			JSONObject json = Utils.JSONRequest("user::::pass::::target", username + "::::" + password + "::::" + ips.get(j), "vh_trTransfer.php");
+			JSONObject json = Utils.JSONRequest("user::::pass::::uhash::::target", username + "::::" + password + "::::" + userHash + "::::" + ips.get(j), "vh_trTransfer.php");
 			result = new TransferResult(json, ips.get(j));
 			array.add(result);
 		}

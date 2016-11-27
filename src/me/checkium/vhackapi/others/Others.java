@@ -9,9 +9,11 @@ import me.checkium.vhackapi.Utils;
 public class Others {
     protected String username;
     protected String password;
-	public Others(String user, String pass) {
+    protected String userHash;
+	public Others(String user, String pass, String uhash) {
 		username = user;
 		password = pass;
+		userHash = uhash;
 	}
 	public PackageResult openPackage() {
 		
@@ -25,7 +27,7 @@ public class Others {
 		
 	
 	
-		JSONObject json = Utils.JSONRequest("user::::pass", username  + "::::" + password, "vh_openFreeBonus.php");
+		JSONObject json = Utils.JSONRequest("user::::pass::::uhash", username  + "::::" + password + "::::" + userHash, "vh_openFreeBonus.php");
 		if (json == null) {
 			return result;
 	    }
