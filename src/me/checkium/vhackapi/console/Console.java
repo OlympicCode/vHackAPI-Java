@@ -119,7 +119,11 @@ public class Console {
 	    return string;
 	}
     
-
+	public SpywareUploadResult uploadSpywareTo(ScannedNode node)
+	{
+		String returnString = Utils.StringRequest("user::::pass::::uhash::::target", username + "::::" + password + "::::" + userHash + "::::" + node.getIP(), "vh_spywareUpload.php");
+		return new SpywareUploadResult(returnString);
+	}
 	
 	
 	
