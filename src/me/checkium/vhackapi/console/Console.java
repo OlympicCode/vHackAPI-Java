@@ -31,22 +31,33 @@ public class Console {
 	
 	/**
 	 * 
+	 * Get IP from console
+	 * 
+	 * @param global Use global?
+	 * @param attacked Get already attacked IPs?
+	 */
+	public String getIP(boolean attacked, boolean global) throws JSONException {
+		String result = null;
+		JSONObject json = Utils.JSONRequest("user::::pass::::uhash::::global", username + "::::" + password + "::::" + userHash + "::::" + (global?"1":"0"), "vh_network.php");
+		JSONArray jSONArray = json.getJSONArray("data");
+		result = jSONArray.getJSONObject(0).getString("ip");
+		return result;
+	}
+	
+	/**
+	 * 
 	 * Get IPs from console
 	 * 
 	 * @param number How many IPs?
 	 * @param global Use global?
 	 * @param attacked Get already attacked IPs?
 	 */
-	public ArrayList<String> getIPs(int number, boolean attacked, boolean global){
+	public ArrayList<String> getIPs(int number, boolean attacked, boolean global) throws JSONException {
 		ArrayList<String> result = new ArrayList<String>();
 		ArrayList<String> temporary = new ArrayList<String>();
-		int globali = 0;
-		if (global) {
-			globali = 1;
-		}
 		if (number > 10) {
 			for (int i = 10; i <= number + 9; i = i + 10) {
-				JSONObject json = Utils.JSONRequest("user::::pass::::uhash::::global", username + "::::" + password + "::::" + userHash + "::::" + Integer.toString(globali), "vh_network.php");
+				JSONObject json = Utils.JSONRequest("user::::pass::::uhash::::global", username + "::::" + password + "::::" + userHash + "::::" + (global?"1":"0"), "vh_network.php");
 				JSONArray jSONArray = json.getJSONArray("data");
 				for (int j = 0; j <= jSONArray.length() - 1; j++) {
 					JSONObject ip = jSONArray.getJSONObject(j);
@@ -58,7 +69,7 @@ public class Console {
 				result.add(temporary.get(k));
 			}
 		} else {
-			JSONObject json = Utils.JSONRequest("user::::pass::::uhash::::global", username + "::::" + password + "::::" + userHash + "::::" + Integer.toString(globali), "vh_network.php");
+			JSONObject json = Utils.JSONRequest("user::::pass::::uhash::::global", username + "::::" + password + "::::" + userHash + "::::" + (global?"1":"0"), "vh_network.php");
 			JSONArray jSONArray = json.getJSONArray("data");
 			for (int k = 0; k < number; k++) {
 				result.add(jSONArray.getJSONObject(k).getString("ip"));
@@ -67,6 +78,23 @@ public class Console {
 		return result;
 	}
 
+	public ScannedNode scanIP(String ip) {
+        InputStream is;
+        BufferedReader rd;
+        ScannedNode result = null;
+        try {
+            is = new URL(Utils.generateURL("user::::pass::::target", username + "::::" + password + "::::" + ip, "vh_scan.php")).openStream();
+            rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+            String[] temp = ReadBigStringIn(rd);
+            result = new ScannedNode(temp);
+            result.setIP(ip);
+            TimeUnit.MILLISECONDS.sleep(100);
+        } catch (InterruptedException|IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+	
     public List<ScannedNode> scanIPs(List<String> ips) {
         InputStream is;
         BufferedReader rd;
@@ -74,7 +102,7 @@ public class Console {
         ScannedNode result;
 
         for (String ip : ips) {
-            try{
+            try {
                 is = new URL(Utils.generateURL("user::::pass::::target", username + "::::" + password + "::::" + ip, "vh_scan.php")).openStream();
                 rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
                 String[] temp = ReadBigStringIn(rd);
@@ -83,7 +111,6 @@ public class Console {
                 array.add(result);
                 TimeUnit.MILLISECONDS.sleep(100);
             } catch (InterruptedException|IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -94,15 +121,13 @@ public class Console {
         JSONObject json = Utils.JSONRequest("user::::pass::::uhash::::target", username + "::::" + password + "::::" + userHash + "::::" + node.getIP(), "vh_trTransfer.php");
         return new TransferResult(json, node.getIP());
     }
-
 	
-	public ArrayList<TransferResult> trTransferIPs(ArrayList<String> ips) {
+	public ArrayList<TransferResult> transferTrojansTo(ArrayList<ScannedNode> nodes) throws JSONException {
 		ArrayList<TransferResult> array = new ArrayList<TransferResult>();
 		TransferResult result;
-		for (int j = 0; j < ips.size(); j++) {
-
-			JSONObject json = Utils.JSONRequest("user::::pass::::uhash::::target", username + "::::" + password + "::::" + userHash + "::::" + ips.get(j), "vh_trTransfer.php");
-			result = new TransferResult(json, ips.get(j));
+		for (int j = 0; j < nodes.size(); j++) {
+			JSONObject json = Utils.JSONRequest("user::::pass::::uhash::::target", username + "::::" + password + "::::" + userHash + "::::" + nodes.get(j).getIP(), "vh_trTransfer.php");
+			result = new TransferResult(json, nodes.get(j).getIP());
 			array.add(result);
 		}
 		return array;
