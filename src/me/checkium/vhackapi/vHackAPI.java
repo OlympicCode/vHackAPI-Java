@@ -124,6 +124,8 @@ public class vHackAPI {
 			return "ID";
 		case "btntpc":
 			return "Botnet PC";
+		case "boost":
+			return "Booster";
 	    default:
 	    	return null;
 		}
