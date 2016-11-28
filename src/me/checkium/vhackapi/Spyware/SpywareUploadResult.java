@@ -1,4 +1,4 @@
-package me.checkium.vhackapi.console;
+package me.checkium.vhackapi.Spyware;
 
 public class SpywareUploadResult {
 
