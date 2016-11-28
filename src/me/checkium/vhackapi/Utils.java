@@ -45,31 +45,37 @@ public class Utils {
       }
 
     public static JSONObject JSONRequest(String format, String data, String php){
-    	System.setProperty("http.agent", "Chrome");
- 	 try {
-		    SSLContext sc = SSLContext.getInstance("SSL");
-		    sc.init(null, Utils.trustAllCerts, new java.security.SecureRandom());
-		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-		} catch (GeneralSecurityException e) {
+    	JSONObject json = null;
+    	String jsonText = StringRequest(format, data, php);
+		if (jsonText.length() == 1) {
+			return null;
 		}
-		
-		JSONObject json = null;
-		InputStream is;
-		try {
-			is = new URL(Utils.generateURL(format, data, php)).openStream();
-			BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-			String jsonText = Utils.readJson(rd);
-			if (jsonText.length() == 1) {
-				return null;
-		    }
-		    json = new JSONObject(jsonText);
-		} catch (IOException e) {
-            e.printStackTrace();
-		}
+		json = new JSONObject(jsonText);
 		return json;
 	}
+    
+    public static String StringRequest(String format, String data, String php)
+    {
+    	System.setProperty("http.agent", "Chrome");
+    	 try {
+   		    SSLContext sc = SSLContext.getInstance("SSL");
+   		    sc.init(null, Utils.trustAllCerts, new java.security.SecureRandom());
+   		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+   		} catch (GeneralSecurityException e) {
+   		}
+   		
+   		String jsonText = null;
+   		InputStream is;
+   		try {
+   			is = new URL(Utils.generateURL(format, data, php)).openStream();
+   			BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+   			jsonText = Utils.readJson(rd);
+   		} catch (IOException e) {
+               e.printStackTrace();
+   		}
+   		return jsonText;
+    }
 
-	//I sometimes get "Request Failed"
     private static byte[] m9179a(byte[] arrby, int n2, int n3, byte[] arrby2, int n4, byte[] arrby3) {
         int n5 = n3 > 0 ? arrby[n2] << 24 >>> 8 : 0;
         int n6 = n3 > 1 ? arrby[n2 + 1] << 24 >>> 16 : 0;
