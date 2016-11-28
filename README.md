@@ -7,7 +7,7 @@ Current feature list:
 - Ability to scan the network for IP addresses.
 - Scan IP addresses for stats.
 - Execute a trTransfer on an IP and retrieve the results.
-- Upload adware to a target IP.
+- Upload spyware to a target IP and get Infos about the spyware you have installed on remote IPs.
 - Upgrade software/hardware.
 - Abort tasks/finish tasks with netcoin.
 - Open free packages.
