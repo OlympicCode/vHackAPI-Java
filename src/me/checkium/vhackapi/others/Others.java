@@ -70,7 +70,13 @@ public class Others {
         	  //Bot net pc
         	 result = new PackageResult(PackageResultEnum.btntpc, json.getInt("win"));
         	 return result;
+         case 4:
+        	 //Booster
         	 
+        	 //you seem to get only one per package max.
+        	 //my test had win: null and lvl: 0 in the result both times i tested it
+        	 result = new PackageResult(PackageResultEnum.boost, 1);
+        	 return result;
         }
 	return result;
    }

@@ -118,9 +118,5 @@ public class Console {
 	    }
 	    return string;
 	}
-    
-
-	
-	
 	
 }
