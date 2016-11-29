@@ -26,6 +26,17 @@ public class SpywareManager {
 		return new SpywareUploadResult(returnString);
 	}
 	
+	public boolean removeSpywareFrom(ScannedNode node)
+	{
+		String returnString = Utils.StringRequest("user::::pass::::uhash::::target", username + "::::" + password + "::::" + userHash + "::::" + node.getIP(), "vh_removeSpywareRemote.php");
+		JSONObject d = new JSONObject(returnString);
+		if (d.getInt("result") == 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public ArrayList<Spyware> getActiveSpyware()
 	{
 		ArrayList<Spyware> list = new ArrayList<>();
