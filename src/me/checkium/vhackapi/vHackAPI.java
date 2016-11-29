@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
 
+import me.checkium.vhackapi.Spyware.SpywareManager;
 import me.checkium.vhackapi.chat.Chat;
 import me.checkium.vhackapi.console.Console;
 import me.checkium.vhackapi.others.Others;
@@ -30,7 +31,11 @@ public class vHackAPI {
 	 public UpgradeManager getUpgradeManager() {
 		 UpgradeManager manager = new UpgradeManager(username, password, userHash);
 		 return manager;
-	 }		
+	 }	
+	 public SpywareManager getSpywareManager() {
+		 SpywareManager manager = new SpywareManager(username, password, userHash);
+		 return manager;
+	 }	
 
 	public String getStats(Stats stat) {
 		try {
