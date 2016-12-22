@@ -1,7 +1,7 @@
 # vHackAPI-Java
 
 ### Project Staus: Temporarily halted
-#### 1.0 Work has started.
+#### 1.0 Work has started, follow the progress by [clicking here](https://github.com/vHack-API/vHackAPI-Java/projects/2)
 
 [![Discord](https://img.shields.io/badge/Chat-%20on%20Discord-738bd7.svg)](https://discord.gg/PHgESQn) [![Build Status](https://travis-ci.org/vHack-API/vHackAPI-Java.svg?branch=master)](https://travis-ci.org/vHack-API/vHackAPI-Java) [![Downloads](https://img.shields.io/github/downloads/vHack-API/vHackAPI-Java/total.svg)]() [![GitHub release](https://img.shields.io/github/release/vHackAPI/vHackAPI-Java.svg)]()
 
