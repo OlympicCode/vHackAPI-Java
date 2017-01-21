@@ -110,7 +110,7 @@ public class ScannedNode {
 
     public Boolean isAnonymous() {
         if (!success) return null;
-        return anonymous.equals("YES");
+        return "YES".equals(anonymous);
     }
 
 
