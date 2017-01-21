@@ -40,13 +40,22 @@ public class Utils {
     public static JSONObject JSONRequest(String format, String data, String php){
     	JSONObject json = null;
     	String jsonText = StringRequest(format, data, php);
-		if (jsonText.length() == 1) {
+		if("".equals(jsonText))
+		{
+			throw new RuntimeException("Old API URL");
+		}
+		else if("8".equals(jsonText))
+		{
+			throw new RuntimeException("Wrong Password/User");
+		}
+		else if (jsonText.length() == 1) {
 			return null;
 		}
 		json = new JSONObject(jsonText);
 		return json;
 	}
     
+    //it'll just do the request without any checks
     public static String StringRequest(String format, String data, String php)
     {
     	System.setProperty("http.agent", "Chrome");
