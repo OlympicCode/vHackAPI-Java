@@ -1,2 +1,4 @@
 language: java
-source: 7
+script: mvn compile -source 7
+jdk:
+  - oraclejdk7
