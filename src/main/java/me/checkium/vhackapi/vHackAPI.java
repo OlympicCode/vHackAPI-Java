@@ -1,11 +1,5 @@
 package me.checkium.vhackapi;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
@@ -43,19 +37,8 @@ public class vHackAPI {
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
-		JSONObject json = null;
-        InputStream is;
-			try {
-				is = new URL(Utils.generateURL("user::::pass::::uhash", username + "::::" + password + "::::" + userHash, "vh_update.php")).openStream();
-				BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-				String jsonText = Utils.readJson(rd);
-				json = new JSONObject(jsonText);
-				if (json.getString(stat.toString()) == null) {
-					return null;
-				}
-			}  catch (IOException e) {
-				e.printStackTrace();
-			}
+		JSONObject json = Utils.JSONRequest("user::::pass::::uhash", username + "::::" + password + "::::" + userHash, "vh_update.php");
+		
 		return json.getString(stat.toString());
 	}
 	
