@@ -2,7 +2,7 @@
 
 #### 1.0 Work has started, follow the progress by [clicking here](https://github.com/vHack-API/vHackAPI-Java/projects/2)
 
-[![Discord](https://img.shields.io/badge/Chat-%20on%20Discord-738bd7.svg)](https://discord.gg/PHgESQn) [![Build Status](https://travis-ci.org/vHack-API/vHackAPI-Java.svg?branch=master)](https://travis-ci.org/vHack-API/vHackAPI-Java) [![Downloads](https://img.shields.io/github/downloads/OlympicCode/vHackAPI-Java/total.svg)]() [![GitHub release](https://img.shields.io/github/release/OlympicCode/vHackAPI-Java.svg)]()
+[![Discord](https://img.shields.io/badge/Chat-%20on%20Discord-738bd7.svg)](https://discord.gg/PHgESQn) [![Build Status](https://travis-ci.org/OlympicCode/vHackAPI-Java.svg?branch=master)](https://travis-ci.org/vHack-API/vHackAPI-Java) [![Downloads](https://img.shields.io/github/downloads/OlympicCode/vHackAPI-Java/total.svg)]() [![GitHub release](https://img.shields.io/github/release/OlympicCode/vHackAPI-Java.svg)]()
 
 ### Contributors: [@Checkium](https://github.com/checkium), [@dude24760](https://github.com/dude24760), [@angelbirth](https://github.com/angelbirth), [@Qup42](https://github.com/Qup42), [@tr0teK](https://github.com/tr0teK)
 ###### Don't forget to add your name here when you pull request.
