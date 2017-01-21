@@ -42,7 +42,7 @@ public class ChatUtils {
 			e.printStackTrace();
 		}
 	}
-    public static void connectToChat(vHackAPI api) {
+    public static void connectToChat(final vHackAPI api) {
     	
     	Thread threadA = new Thread(new Runnable(){
             public void run(){
