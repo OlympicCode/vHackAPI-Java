@@ -142,6 +142,13 @@ public class Console {
 	      i++;
 	    }
 	    return string;
+	    //are more elegant than old code but need java 8 and
+		//the array could have less than 14 entries which would cause problems in scanned node
+		//return buffIn.lines().toArray(size -> new String[size]);
+	    //return buffIn.lines().toArray(String[]::new);
+
+		//should be safer than above but needs java 8
+	    //return buffIn.lines().toArray(size -> new String[14]);
 	}
 	
 }
