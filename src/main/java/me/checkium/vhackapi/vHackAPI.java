@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import me.checkium.vhackapi.Spyware.SpywareManager;
 import me.checkium.vhackapi.chat.Chat;
 import me.checkium.vhackapi.console.Console;
-import me.checkium.vhackapi.others.Others;
+import me.checkium.vhackapi.others.PackageOpener;
 import me.checkium.vhackapi.upgrades.UpgradeManager;
 
 public class vHackAPI {
@@ -42,9 +42,9 @@ public class vHackAPI {
 		return json.getString(stat.toString());
 	}
 	
-	public Others getOthers() {
-		Others others = new Others(username, password, userHash);
-		return others;
+	public PackageOpener getPackageOpener() {
+		PackageOpener packageOpener = new PackageOpener(username, password, userHash);
+		return packageOpener;
 	}
 	
 	public String getUsername(){
