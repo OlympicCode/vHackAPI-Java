@@ -44,14 +44,17 @@ public class Utils {
       }
 
     /**
-     * Makes a requests to the vHack Api, with the params format, data data and to the file php and returns the result, which is json, as a JSONObject Object.
-     * Errors are thrown if user/password is wrong and (possibly) if the api url changed.
-     * @param format Lists the params that will be passed to the api endpoint. The names are separated with "::::".
-     *               Every request, except the very first one, should include "user::::pass::::uhash".
+     * Makes a request to the api and returns the result as a JSONObject Object.
+     * Makes a requests to the vHack Api, with the params format, data data and to the file php and returns the result, which is json, as a JSONObject Object.<br>
+     * Errors are thrown if user/password is wrong and (possibly) if the api url changed.<br>
+     * It is similar to {@link Utils#StringRequest(String, String, String)} but differs from it in that does processing with the obtained data.<br>
+     * it returns the result as json Object and performs checks for any (known) errors.
+     * @param format Lists the params that will be passed to the api endpoint. The names are separated with "::::".<br>
+     *               Every request, except the very first one, should include "user::::pass::::uhash".<br>
      *               Example: "user::::pass::::uhash::::global" (taken from Console.getIP)
-     * @param data The data for the params that you passed in. They are also separated by "::::". You can just concatanate the parts of this.
-     *             Example: "vHackAPI::::123456::::aaaabbbbccccddddeeeeffffgggghhhhiiiijjjjkkkkllllmmmmnnnnoooopppp::::1" (no need to try ;) )
-     * @param php This is the api endpoint that the request will be sent to. In the case of the vHackAPI it are php documents.
+     * @param data The data for the params that you passed in. They are also separated by "::::". You can just concatanate the parts of this.<br>
+     *             Example: "vHackAPI::::123456::::aaaabbbbccccddddeeeeffffgggghhhhiiiijjjjkkkkllllmmmmnnnnoooopppp::::1"
+     * @param php This is the api endpoint that the request will be sent to. In the case of the vHackAPI it are php documents.<br>
      *            Example "vh_network.php"
      * @return The resulte Json as a JSONObject. Errors are thrown if user/password is wrong and (possibly) if the api url changed. null is returned if there are other errors.
      */
@@ -74,6 +77,19 @@ public class Utils {
 	}
 
     //it'll just do the request without any checks
+    /**
+     * Makes a request to the api and returns the result as a String.
+     * Makes a requests to the vHack Api, with the params format, data data and to the file php and returns the result, which is json, as a String Object.<br>
+     * It is similar to {@link Utils#JSONRequest(String, String, String)} but differs from it in the form that it returns and String and doesn't perform checks.
+     * @param format Lists the params that will be passed to the api endpoint. The names are separated with "::::".<br>
+     *               Every request, except the very first one, should include "user::::pass::::uhash".<br>
+     *               Example: "user::::pass::::uhash::::global" (taken from Console.getIP)
+     * @param data The data for the params that you passed in. They are also separated by "::::". You can just concatanate the parts of this.<br>
+     *             Example: "vHackAPI::::123456::::aaaabbbbccccddddeeeeffffgggghhhhiiiijjjjkkkkllllmmmmnnnnoooopppp::::1"
+     * @param php This is the api endpoint that the request will be sent to. In the case of the vHackAPI it are php documents.<br>
+     *            Example "vh_network.php"
+     * @return The resulte Json as a String.
+     */
     public static String StringRequest(String format, String data, String php)
     {
     	System.setProperty("http.agent", "Chrome");
@@ -136,7 +152,8 @@ public class Utils {
     }
 
     /**
-     * Hashes the parameter (curently) using the {@value md5s} algorithm. The hashing alorithm is determined by
+     * Hashes the given String with {@value md5s}.
+     * The hashing alorithm is determined by {@link Utils#md5s}
      * @param str The string that should be hashed with {@value md5s}.
      * @return The parameter str hashed using {@value md5s}.
      */
@@ -198,17 +215,17 @@ public class Utils {
     }
 
     /**
-     * Generates the complete url a request has to be done to, to achieve a certain action (E.g. upgrade a Botnet Computer).
-     * Needed for this are the username, the password, the uHash and any additional parameters. The time is also neede but you dont need to supply it because the programm get the time by it itself.
-     * @param format Lists the params that will be passed to the api endpoint. The names are separated with "::::".
-     *               Every request, except the very first one, should include "user::::pass::::uhash".
+     * Generates a url to where a request has to be made.
+     * Generates the complete url a request has to be done to, to achieve a certain action (E.g. upgrade a Botnet Computer).<br>
+     * Needed for this are the username, the password, the uHash and any additional parameters. The time is also neede but you dont need to supply it because the programm get the time by it itself.<br>
+     * It is used by {@link Utils#JSONRequest(String, String, String)} and {@link Utils#StringRequest(String, String, String)}.
+     * @param format Lists the params that will be passed to the api endpoint. The names are separated with "::::".<br>
+     *               Every request, except the very first one, should include "user::::pass::::uhash".<br>
      *               Example: "user::::pass::::uhash::::global" (taken from Console.getIP)
-     * @param data The data for the params that you passed in. They are also separated by "::::". You can just concatanate the parts of this.
-     *             Example: "vHackAPI::::123456::::aaaabbbbccccddddeeeeffffgggghhhhiiiijjjjkkkkllllmmmmnnnnoooopppp::::1" (no need to try ;) )
-     * @param php This is the api endpoint that the request will be sent to. In the case of the vHackAPI it are php documents.
+     * @param data The data for the params that you passed in. They are also separated by "::::". You can just concatanate the parts of this.<br>
+     *             Example: "vHackAPI::::123456::::aaaabbbbccccddddeeeeffffgggghhhhiiiijjjjkkkkllllmmmmnnnnoooopppp::::1"
+     * @param php This is the api endpoint that the request will be sent to. In the case of the vHackAPI it are php documents.<br>
      *            Example "vh_network.php"
-     * @see Utils#JSONRequest(String, String, String)
-     * @see Utils#StringRequest(String, String, String)
      * @return The url Url a request has to be directed to.
      */
     public  static String generateURL(String format, String data, String php) {
