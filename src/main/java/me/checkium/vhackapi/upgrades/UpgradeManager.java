@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import me.checkium.vhackapi.Utils;
@@ -33,18 +34,10 @@ public class UpgradeManager {
 		JSONObject json = new JSONObject();
 		try {
 	    TimeUnit.MILLISECONDS.sleep(100);
-		InputStream is = new URL(Utils.generateURL("user::::pass::::uhash::::utype", username + "::::" + password + "::::" + userHash + "::::" + type.toString(), "vh_addUpdate.php")).openStream();
-		BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-		String jsonText;
-		
-			jsonText = Utils.readJson(rd);
-	     json = new JSONObject(jsonText);
-	    
-	    
-		} catch (IOException | InterruptedException e) {
-			// TODO Auto-generated catch block
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		json = Utils.JSONRequest("user::::pass::::uhash::::utype", username + "::::" + password + "::::" + userHash + "::::" + type.toString(), "vh_addUpdate.php");
 		int result = json.getInt("result");
 		if (result == 1) {
 			return UpgradeResult.NoMoney;
@@ -64,18 +57,14 @@ public class UpgradeManager {
 		JSONObject json = new JSONObject();
 		try {
 	    TimeUnit.MILLISECONDS.sleep(100);
-		InputStream is = new URL(Utils.generateURL("user::::pass::::uhash", username + "::::" + password + "::::" + userHash, "vh_tasks.php")).openStream();
-		BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-		String jsonText;
-		
-		 jsonText = Utils.readJson(rd);
+
 		  JSONArray arrayy;
 		 try {
-	    json = new JSONObject(jsonText);
+			 json = Utils.JSONRequest("user::::pass::::uhash", username + "::::" + password + "::::" + userHash, "vh_tasks.php");
 	   
 	     
 	    	 arrayy = json.getJSONArray("data");
-	     } catch (Exception e) {
+	     } catch (JSONException e) {
 	    	 return array;
 	     }
 	     
@@ -86,70 +75,59 @@ public class UpgradeManager {
 		}
 	    
 	    
-		} catch (IOException | InterruptedException e) {
-			// TODO Auto-generated catch block
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		return array;
 	}
 	
 	public boolean finishTask(Task task) {
-		URLConnection in;
 		try {
 			TimeUnit.MILLISECONDS.sleep(100);
-			in = new URL(Utils.generateURL("user::::pass::::uhash::::taskid", username + "::::" + password + "::::" + userHash + "::::" + task.getTaskID(), "vh_finishTask.php")).openConnection();
-		
-		BufferedReader br = new BufferedReader(new InputStreamReader((in.getInputStream())));
-		String line = br.readLine();
-		if (line == null) {
-			return false;
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
+
+		String line = Utils.StringRequest("user::::pass::::uhash::::taskid", username + "::::" + password + "::::" + userHash + "::::" + task.getTaskID(), "vh_finishTask.php");
+
 		if (line.contains("4")) {
 			return true;
-		} else {
+		}
+		else if(line.equals("")) {
 			return false;
 		}
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		else {
+			return false;
 		}
-	return false;
-		
 	}
 	
 	public boolean abortTask(Task task) {
-		URLConnection in;
 		try {
 			TimeUnit.MILLISECONDS.sleep(100);
-			in = new URL(Utils.generateURL("user::::pass::::uhash::::taskid", username + "::::" + password + "::::" + userHash + "::::" + task.getTaskID(), "vh_abortTask.php")).openConnection();
-		
-		BufferedReader br = new BufferedReader(new InputStreamReader((in.getInputStream())));
-		String line = br.readLine();
-		if (line == null) {
-			return false;
-		}
-		if (line.contains("0")) {
-			return true;
-		} else {
-			return false;
-		}
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	return false;
-		
+
+		String line = Utils.StringRequest("user::::pass::::uhash::::taskid", username + "::::" + password + "::::" + userHash + "::::" + task.getTaskID(), "vh_abortTask.php");
+
+		if(line.contains("0"))
+		{
+			//succeded
+			return true;
+		}
+		else if(line.equals(""))
+		{
+			//other error
+			return false;
+		}
+		else if(line.contains("2"))
+		{
+			//task not running
+			return false;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
