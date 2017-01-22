@@ -135,7 +135,7 @@ public class ScannedNode {
 
 
     public Integer getSuccessRate() {
-        if (!success) return null;
+        if (!success) return 0;
         try {
             return Integer.valueOf(successRate.replace("%", ""));
         } catch (NumberFormatException er) {
