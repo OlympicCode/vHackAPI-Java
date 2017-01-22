@@ -15,7 +15,7 @@ import org.json.JSONObject;
 
 public class Utils {
 	public static String url;
-    public static String md5s;
+    public static final String md5s = "MD5";
     public static String secret;
     static final boolean assertionstatus;
     private static final byte[] byt;
@@ -23,11 +23,17 @@ public class Utils {
     static {
         assertionstatus = !Utils.class.desiredAssertionStatus();
         url = "https://api.vhack.cc/v/1/";
-        md5s = "MD5";
+        //md5s = "MD5";
         secret = "aeffI";
         byt = new byte[]{(byte) 65, (byte) 66, (byte) 67, (byte) 68, (byte) 69, (byte) 70, (byte) 71, (byte) 72, (byte) 73, (byte) 74, (byte) 75, (byte) 76, (byte) 77, (byte) 78, (byte) 79, (byte) 80, (byte) 81, (byte) 82, (byte) 83, (byte) 84, (byte) 85, (byte) 86, (byte) 87, (byte) 88, (byte) 89, (byte) 90, (byte) 97, (byte) 98, (byte) 99, (byte) 100, (byte) 101, (byte) 102, (byte) 103, (byte) 104, (byte) 105, (byte) 106, (byte) 107, (byte) 108, (byte) 109, (byte) 110, (byte) 111, (byte) 112, (byte) 113, (byte) 114, (byte) 115, (byte) 116, (byte) 117, (byte) 118, (byte) 119, (byte) 120, (byte) 121, (byte) 122, (byte) 48, (byte) 49, (byte) 50, (byte) 51, (byte) 52, (byte) 53, (byte) 54, (byte) 55, (byte) 56, (byte) 57, (byte) 45, (byte) 95};
     }
-    
+
+    /**
+     * Reads all data from a buffered reader and returns it as a String.
+     * @param rd The buffered Reader which holds the data.
+     * @return The String representation of data the buffered reader contains.
+     * @throws IOException
+     */
     public static String readJson(Reader rd) throws IOException {
         StringBuilder sb = new StringBuilder();
         int cp;
@@ -37,6 +43,21 @@ public class Utils {
         return sb.toString();
       }
 
+    /**
+     * Makes a request to the api and returns the result as a JSONObject Object.
+     * Makes a requests to the vHack Api, with the params format, data data and to the file php and returns the result, which is json, as a JSONObject Object.<br>
+     * Errors are thrown if user/password is wrong and (possibly) if the api url changed.<br>
+     * It is similar to {@link Utils#StringRequest(String, String, String)} but differs from it in that does processing with the obtained data.<br>
+     * it returns the result as json Object and performs checks for any (known) errors.
+     * @param format Lists the params that will be passed to the api endpoint. The names are separated with "::::".<br>
+     *               Every request, except the very first one, should include "user::::pass::::uhash".<br>
+     *               Example: "user::::pass::::uhash::::global" (taken from Console.getIP)
+     * @param data The data for the params that you passed in. They are also separated by "::::". You can just concatanate the parts of this.<br>
+     *             Example: "vHackAPI::::123456::::aaaabbbbccccddddeeeeffffgggghhhhiiiijjjjkkkkllllmmmmnnnnoooopppp::::1"
+     * @param php This is the api endpoint that the request will be sent to. In the case of the vHackAPI it are php documents.<br>
+     *            Example "vh_network.php"
+     * @return The resulte Json as a JSONObject. Errors are thrown if user/password is wrong and (possibly) if the api url changed. null is returned if there are other errors.
+     */
     public static JSONObject JSONRequest(String format, String data, String php){
     	JSONObject json = null;
     	String jsonText = StringRequest(format, data, php);
@@ -54,8 +75,21 @@ public class Utils {
 		json = new JSONObject(jsonText);
 		return json;
 	}
-    
+
     //it'll just do the request without any checks
+    /**
+     * Makes a request to the api and returns the result as a String.
+     * Makes a requests to the vHack Api, with the params format, data data and to the file php and returns the result, which is json, as a String Object.<br>
+     * It is similar to {@link Utils#JSONRequest(String, String, String)} but differs from it in the form that it returns and String and doesn't perform checks.
+     * @param format Lists the params that will be passed to the api endpoint. The names are separated with "::::".<br>
+     *               Every request, except the very first one, should include "user::::pass::::uhash".<br>
+     *               Example: "user::::pass::::uhash::::global" (taken from Console.getIP)
+     * @param data The data for the params that you passed in. They are also separated by "::::". You can just concatanate the parts of this.<br>
+     *             Example: "vHackAPI::::123456::::aaaabbbbccccddddeeeeffffgggghhhhiiiijjjjkkkkllllmmmmnnnnoooopppp::::1"
+     * @param php This is the api endpoint that the request will be sent to. In the case of the vHackAPI it are php documents.<br>
+     *            Example "vh_network.php"
+     * @return The resulte Json as a String.
+     */
     public static String StringRequest(String format, String data, String php)
     {
     	System.setProperty("http.agent", "Chrome");
@@ -108,7 +142,7 @@ public class Utils {
         return arrby2;
     }
 
-    public static String generateUser(byte[] bArr, int i, int i2, byte[] bArr2, boolean z) {
+    private static String generateUser(byte[] bArr, int i, int i2, byte[] bArr2, boolean z) {
         byte[] a = assertion(bArr, i, i2, bArr2, Integer.MAX_VALUE);
         int length = a.length;
         while (!z && length > 0 && a[length - 1] == 61) {
@@ -117,7 +151,13 @@ public class Utils {
         return new String(a, 0, length);
     }
 
-    public static final String hashString(String str) {
+    /**
+     * Hashes the given String with {@value md5s}.
+     * The hashing alorithm is determined by {@link Utils#md5s}
+     * @param str The string that should be hashed with {@value md5s}.
+     * @return The parameter str hashed using {@value md5s}.
+     */
+    private static final String hashString(String str) {
         try {
             MessageDigest instance = MessageDigest.getInstance(md5s);
             instance.update(str.getBytes());
@@ -137,7 +177,7 @@ public class Utils {
         }
     }
 
-    public static byte[] assertion(byte[] bArr, int i, int i2, byte[] bArr2, int i3) {
+    private static byte[] assertion(byte[] bArr, int i, int i2, byte[] bArr2, int i3) {
         int i4 = ((i2 + 2) / 3) * 4;
         byte[] bArr3 = new byte[(i4 + (i4 / i3))];
         int i5 = i2 - 2;
@@ -174,10 +214,23 @@ public class Utils {
         throw new AssertionError();
     }
 
-  
-    public  static String generateURL(String str, String str2, String str3) {
-        String[] split = str.split("::::");
-        String[] split2 = str2.split("::::");
+    /**
+     * Generates a url to where a request has to be made.
+     * Generates the complete url a request has to be done to, to achieve a certain action (E.g. upgrade a Botnet Computer).<br>
+     * Needed for this are the username, the password, the uHash and any additional parameters. The time is also neede but you dont need to supply it because the programm get the time by it itself.<br>
+     * It is used by {@link Utils#JSONRequest(String, String, String)} and {@link Utils#StringRequest(String, String, String)}.
+     * @param format Lists the params that will be passed to the api endpoint. The names are separated with "::::".<br>
+     *               Every request, except the very first one, should include "user::::pass::::uhash".<br>
+     *               Example: "user::::pass::::uhash::::global" (taken from Console.getIP)
+     * @param data The data for the params that you passed in. They are also separated by "::::". You can just concatanate the parts of this.<br>
+     *             Example: "vHackAPI::::123456::::aaaabbbbccccddddeeeeffffgggghhhhiiiijjjjkkkkllllmmmmnnnnoooopppp::::1"
+     * @param php This is the api endpoint that the request will be sent to. In the case of the vHackAPI it are php documents.<br>
+     *            Example "vh_network.php"
+     * @return The url Url a request has to be directed to.
+     */
+    public  static String generateURL(String format, String data, String php) {
+        String[] split = format.split("::::");
+        String[] split2 = data.split("::::");
         long currentTimeMillis = System.currentTimeMillis() / 1000;
         JSONObject jSONObject = new JSONObject();
         for (int i = 0; i < split.length; i++) {
@@ -205,7 +258,7 @@ public class Utils {
         String str9 = generateUser(bytes3, 0, bytes3.length, byt, false);
         String str7 = generateUser(bytes4, 0, bytes4.length, byt, false);
         String str8 = hashString(hashString(a3 + hashString(hashString(str9) + str7)));
-        return url + str3 + "?user=" + a + "&pass=" + str8;
+        return url + php + "?user=" + a + "&pass=" + str8;
     }
 
 }
