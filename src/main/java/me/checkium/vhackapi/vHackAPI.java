@@ -44,6 +44,10 @@ public class vHackAPI {
 		return stats.getString(stat.toString());
 	}
 	
+	public void refreshStats() {
+		stats = null;
+	}
+	
 	public PackageOpener getPackageOpener() {
 		PackageOpener packageOpener = new PackageOpener(username, password, userHash);
 		return packageOpener;
