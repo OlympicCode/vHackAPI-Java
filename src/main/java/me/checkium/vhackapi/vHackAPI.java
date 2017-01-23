@@ -60,9 +60,10 @@ public class vHackAPI {
 	public String getPassword(){
 		return password;
 	}
+
 	public Chat getChat() {
 		Chat chat = new Chat();
-				return chat;
+		return chat;
 	}
 	public vHackAPI(String user, String pass) {
 		username = user;
