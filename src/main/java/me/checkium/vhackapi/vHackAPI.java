@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import me.checkium.vhackapi.Spyware.SpywareManager;
 import me.checkium.vhackapi.chat.Chat;
 import me.checkium.vhackapi.console.Console;
-import me.checkium.vhackapi.others.PackageOpener;
+import me.checkium.vhackapi.others.PackageOpener
 import me.checkium.vhackapi.upgrades.UpgradeManager;
 
 public class vHackAPI {
@@ -40,9 +40,9 @@ public class vHackAPI {
 			e1.printStackTrace();
 		    }
 		    stats = Utils.JSONRequest("user::::pass::::uhash", username + "::::" + password + "::::" + userHash, "vh_update.php");
-		    return json.getString(stat.toString());
+		    return stats.getString(stat.toString());
 		} else {
-	            return json.getString(stat.toString());
+	            return stats.getString(stat.toString());
 		}
 	}
 	
