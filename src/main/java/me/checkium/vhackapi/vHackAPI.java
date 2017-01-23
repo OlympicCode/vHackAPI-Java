@@ -50,9 +50,9 @@ public class vHackAPI {
 	        stats = null;
 	}	
 		
-	public Others getOthers() {
-		Others others = new Others(username, password, userHash);
-		return others;
+	public PackageOpener getPackageOpener() {
+		PackageOpener packageOpener = new PackageOpener(username, password, userHash);
+		return packageOpener;
 	}
 	
 	public String getUsername(){
