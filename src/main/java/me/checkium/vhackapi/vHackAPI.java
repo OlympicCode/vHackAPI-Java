@@ -15,7 +15,6 @@ public class vHackAPI {
 	protected String password;
 	protected String username;
 	protected String userHash;
-	private JSONObject stats = null;
 
 	
 	 public Console getConsole() {
@@ -33,23 +32,16 @@ public class vHackAPI {
 	 }	
 
 	public String getStats(Stats stat) {
-		if(stats == null){
-		    try {
-		        TimeUnit.MILLISECONDS.sleep(200);
-		    } catch (InterruptedException e1) {
+		try {
+			TimeUnit.MILLISECONDS.sleep(200);
+		} catch (InterruptedException e1) {
 			e1.printStackTrace();
-		    }
-		    stats = Utils.JSONRequest("user::::pass::::uhash", username + "::::" + password + "::::" + userHash, "vh_update.php");
-		    return json.getString(stat.toString());
-		} else {
-	            return json.getString(stat.toString());
 		}
+		JSONObject json = Utils.JSONRequest("user::::pass::::uhash", username + "::::" + password + "::::" + userHash, "vh_update.php");
+		
+		return json.getString(stat.toString());
 	}
 	
-	public void refreshStats() {
-	        stats = null;
-	}	
-
 	public PackageOpener getPackageOpener() {
 		PackageOpener packageOpener = new PackageOpener(username, password, userHash);
 		return packageOpener;
