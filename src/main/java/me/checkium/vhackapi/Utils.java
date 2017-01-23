@@ -18,7 +18,7 @@ public class Utils {
      * The url of the current api.<br>
      * As of now it is {@value url}.
      */
-    private static final String url = "https://api.vhack.cc/v/1/";
+    private static final String url = "https://api.vhack.cc/v/2/";
     /**
      * The hashing algorithm that is used to hash data in requests.<br>
      * It now is {@value md5s}.
