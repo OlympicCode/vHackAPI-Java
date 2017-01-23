@@ -40,10 +40,8 @@ public class vHackAPI {
 				e1.printStackTrace();
 			}
 		  	stats = Utils.JSONRequest("user::::pass::::uhash", username + "::::" + password + "::::" + userHash, "vh_update.php");
-		  	return stats.getString(stat.toString());
-		} else { 
-	    		return stats.getString(stat.toString());
-    		}
+		}
+		return stats.getString(stat.toString());
 	}
 	
 	public PackageOpener getPackageOpener() {
