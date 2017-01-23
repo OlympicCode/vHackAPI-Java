@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import me.checkium.vhackapi.Spyware.SpywareManager;
 import me.checkium.vhackapi.chat.Chat;
 import me.checkium.vhackapi.console.Console;
+
 import me.checkium.vhackapi.others.PackageOpener;
 import me.checkium.vhackapi.upgrades.UpgradeManager;
 
@@ -32,16 +33,17 @@ public class vHackAPI {
 	 }	
 
 	public String getStats(Stats stat) {
-		try {
-			TimeUnit.MILLISECONDS.sleep(200);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
-		  stats = Utils.JSONRequest("user::::pass::::uhash", username + "::::" + password + "::::" + userHash, "vh_update.php");
-		  return stats.getString(stat.toString());
-		} else {
-	    return stats.getString(stat.toString());
-    }
+	        if(stats == null){
+			try {
+				TimeUnit.MILLISECONDS.sleep(200);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
+		  	stats = Utils.JSONRequest("user::::pass::::uhash", username + "::::" + password + "::::" + userHash, "vh_update.php");
+		  	return stats.getString(stat.toString());
+		} else { 
+	    		return stats.getString(stat.toString());
+    		}
 	}
 	
 	public PackageOpener getPackageOpener() {
