@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class ChatMessage {
 
-	private static final Pattern pattern = Pattern.compile(":v\\[(.+)!(.+)@(.*) PRIVMSG \\#(\\w+) (.*)");
+	private static final Pattern pattern = Pattern.compile(":v\\[(.+)!(.+)@(.*) PRIVMSG \\#(\\w+) :(.*)");
 
     private String rawmessage;
     private String author;
