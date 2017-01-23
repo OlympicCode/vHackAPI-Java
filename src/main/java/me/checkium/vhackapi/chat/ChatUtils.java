@@ -48,7 +48,7 @@ public class ChatUtils {
             public void run(){
 		 try {
 			@SuppressWarnings("resource")
-			Socket socket = new Socket("chat.vhackxt.com", 6667);
+			Socket socket = new Socket("chat.vhackxt.com", 7531);
 			bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
           BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
           String str2 = "v[" + api.getUsername();
