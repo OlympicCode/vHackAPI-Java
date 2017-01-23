@@ -6,11 +6,11 @@ import org.json.JSONObject;
 
 import me.checkium.vhackapi.Utils;
 
-public class Others {
+public class PackageOpener {
     protected String username;
     protected String password;
     protected String userHash;
-	public Others(String user, String pass, String uhash) {
+	public PackageOpener(String user, String pass, String uhash) {
 		username = user;
 		password = pass;
 		userHash = uhash;

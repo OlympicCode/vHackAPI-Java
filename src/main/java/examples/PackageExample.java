@@ -9,7 +9,7 @@ public class PackageExample {
 	vHackAPI api = new vHackAPIBuilder().password("pass").username("user").getAPI();
 	
 	public void openPackage() {
-		PackageResult openresult = api.getOthers().openPackage();
+		PackageResult openresult = api.getPackageOpener().openPackage();
 		System.out.println("Got " + openresult.getResultAmount() + api.humanizeString(openresult.getResultType().toString()));
 	}
 }
