@@ -52,7 +52,7 @@ public class ChatUtils {
 			bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
           BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
           String str2 = "v[" + api.getUsername();
-          bufferedWriter.write("PASS " + api.getStats(Stats.hash) + "\r\nNICK " + str2 + "\r\n");
+          bufferedWriter.write("NICK " + str2 + "\r\n");
           bufferedWriter.write("USER " + api.getStats(Stats.id) + " 0 * : vHack XT@Android\r\n");
           bufferedWriter.flush();
          while(true) {
@@ -80,7 +80,7 @@ public class ChatUtils {
                  }
                  if (readLine.contains("376")) {
         
-                     bufferedWriter.write("JOIN " + vhackxy + "\r\n");
+                     bufferedWriter.write("PRIVMSG vHackXTGuard :.join " + api.getStats(Stats.id) + " " + api.getStats(Stats.hash) + "\r\n");
                      bufferedWriter.flush();
                      bufferedWriter.flush();
                  }

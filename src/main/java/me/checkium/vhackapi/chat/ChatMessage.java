@@ -1,16 +1,30 @@
 package me.checkium.vhackapi.chat;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class ChatMessage {
-    protected String rawmessage;
-    protected String author;
-    protected String message;
+
+	private static final Pattern pattern = Pattern.compile(":v\\[(.+)!(.+)@(.*) PRIVMSG \\#(\\w+) (.*)");
+
+    private String rawmessage;
+    private String author;
+    private String hash;
+    private String domain;
+    private String channel;
+    private String message;
+
 	public ChatMessage(String rawwmessage) {
-        rawmessage = rawwmessage;
-		String[] str1 = rawmessage.split(":");
-		message = str1[2];
-		String[] str2 = rawmessage.split("!");
-		String str3 = str2[0].replace(":v[", "");
-		author = str3;
+		Matcher matcher = pattern.matcher(rawwmessage);
+		if(matcher.matches())
+		{
+			this.rawmessage = rawwmessage;
+			author = matcher.group(1);
+			hash = matcher.group(2);
+			domain = matcher.group(3);
+			channel = matcher.group(4);
+			message = matcher.group(5);
+		}
 	}
 	
 	public String getAuthor(){
@@ -23,5 +37,31 @@ public class ChatMessage {
 	
 	public String getRawMessage(){
 		return rawmessage;
+	}
+
+	public String getHash() {
+		return hash;
+	}
+
+	public String getDomain() {
+		return domain;
+	}
+
+	public String getChannel() {
+		return channel;
+	}
+
+	public UserRoles getUserRole() {
+		switch (domain)
+		{
+			case "admin.vhack.biz":
+				return UserRoles.Admin;
+			case "mod.vhack.biz":
+				return UserRoles.Mod;
+			case "vip.vhack.biz":
+				return UserRoles.VIP;
+			default:
+				return UserRoles.StandardUser;
+		}
 	}
 }
