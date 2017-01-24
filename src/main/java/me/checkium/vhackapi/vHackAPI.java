@@ -33,13 +33,19 @@ public class vHackAPI {
 	 }	
 
 	public String getStats(Stats stat) {
-		if(stats == null){
-			forceFetchStats();
-		}
+	 	fetchStats();
+
 		return stats.getString(stat.toString());
 	}
-	
-	public void forceFetchStats() {
+
+	public String getCachedStats(Stats stat) {
+		if(stats == null){
+			fetchStats();
+		}
+	 	return stats.getString(stat.toString());
+	}
+
+	public void fetchStats() {
 		try {
 			TimeUnit.MILLISECONDS.sleep(200);
 		} catch (InterruptedException e1) {
