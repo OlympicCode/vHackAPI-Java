@@ -1,4 +1,4 @@
-package me.checkium.vhackapi.console;
+package ga.olympiccode.vhack.console;
 
 public enum ScanStats {
 

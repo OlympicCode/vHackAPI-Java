@@ -1,4 +1,4 @@
-package me.checkium.vhackapi.console;
+package ga.olympiccode.vhack.console;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -7,13 +7,18 @@ public class TransferResult {
 
     protected boolean success;
     protected int moneyamount;
-    protected int repgained;
-    protected int replost;
+    protected int rep;
     protected String Ip;
 
     public TransferResult(JSONObject result, String IP) throws JSONException {
         Ip = IP;
-        success = result.getString("result").contains("0");
+        try {
+        	@SuppressWarnings("unused")
+			int d = result.getInt("eloch");
+        	success = true;
+        } catch (Exception e) {
+        	success = false;
+        }
         if (!success) return;
         try {
             moneyamount = result.getInt("amount");
@@ -21,13 +26,9 @@ public class TransferResult {
             System.out.println(result);
             e.printStackTrace();
         }
-        if (Integer.toString(result.getInt("eloch")).contains("-")) {
-            replost = result.getInt("eloch");
-            repgained = 0;
-        } else {
-            replost = 0;
-            repgained = result.getInt("eloch");
-        }
+       
+            rep = result.getInt("eloch");
+         
     }
 
     public boolean getSuccess() {
@@ -42,11 +43,8 @@ public class TransferResult {
         return moneyamount;
     }
 
-    public int getRepGained() {
-        return repgained;
+    public int getRep() {
+        return rep;
     }
 
-    public int getRepLost() {
-        return replost;
-    }
 }

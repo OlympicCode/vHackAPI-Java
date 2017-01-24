@@ -1,9 +1,7 @@
-package me.checkium.vhackapi.console;
+package ga.olympiccode.vhack.console;
 
-/**
- * Created by ric on 31/08/16.
- */
-public class ScannedNode {
+
+public class ScanResult {
     private String IP;
     private boolean success = true;
     private String username,
@@ -18,7 +16,7 @@ public class ScannedNode {
             failRep,
             successRate;
 
-    public ScannedNode(String[] result) {
+    public ScanResult(String[] result) {
         if (result.length == 1) {
             success = false;
             return;
@@ -110,7 +108,9 @@ public class ScannedNode {
 
     public Boolean isAnonymous() {
         if (!success) return null;
-        return "YES".equals(anonymous);
+        
+        if (anonymous.equals("YES")) return true;
+        return null;
     }
 
 
@@ -135,7 +135,7 @@ public class ScannedNode {
 
 
     public Integer getSuccessRate() {
-        if (!success) return 0;
+        if (!success) return null;
         try {
             return Integer.valueOf(successRate.replace("%", ""));
         } catch (NumberFormatException er) {
@@ -150,19 +150,5 @@ public class ScannedNode {
     public void setIP(String IP) {
         this.IP = IP;
     }
-    /*
 
-    private val success = result[1] != null
-    val username = result[1]?.substring(26)
-    val firewallLevel = result[2]!!.substring(26).toInt()
-    val antiVirusLevel = result[3]!!.substring(27).toInt()
-    val scanLevel = result[4]!!.substring(22).toInt()
-    val sdkLevel = result[5]!!.substring(21).toInt();
-    val spamLevel = result[6]!!.substring(22).toInt();
-    val money = result[7]!!.substring(23).toInt();
-    val anonymous = result[9]!!.substring(27) == "YES";
-    val successRep = result[11]!!.substring(32).toInt();
-    val failRep = result[12]!!.substring(29).toInt();
-    val successRate = result[13]!!.substring(39).replace("%","").toInt();
-     */
 }

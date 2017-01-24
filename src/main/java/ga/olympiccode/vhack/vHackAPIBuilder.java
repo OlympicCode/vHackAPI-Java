@@ -1,6 +1,7 @@
-package me.checkium.vhackapi;
+package ga.olympiccode.vhack;
 
-import java.security.GeneralSecurityException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -8,14 +9,13 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.json.JSONObject;
-
 public class vHackAPIBuilder {
 
+	
 	protected String password;
 	protected String username;
 	protected String email;
-	
+	protected boolean caching = false;
 	 public vHackAPIBuilder username(String username) {
 	        this.username = username;
 	        return this;
@@ -31,30 +31,34 @@ public class vHackAPIBuilder {
 		 return this;
 	 }
 	 
-	 public vHackAPIBuilder register() {
-		
-		 JSONObject json = Utils.JSONRequest("user::::pass::::email", username + "::::" + password + "::::" + email, "vh_register.php");
-		 
-		 if (json.getString("result") != "0") {
-			 return null;
-		 } else {
-		 return this;
-		 }
-	 }
-	 
-	
 	 
 	 public vHackAPI getAPI() {
-		 try {
-	   		    SSLContext sc = SSLContext.getInstance("SSL");
-	   		    sc.init(null, trustAllCerts, new java.security.SecureRandom());
-	   		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-	   		} catch (GeneralSecurityException e) {
-	   		}
-	   		
-		 vHackAPI api = new vHackAPI(username, password);
+	   	 registerCertificate();	
+		 vHackAPI api = new vHackAPI(username, password, caching);
 		 return api;
 	 }
+	 
+	 public vHackAPIBuilder cacheStats(boolean d) {
+	    	 this.caching = d;
+	    	 return this;
+	 }
+	 
+	 public void registerCertificate() {
+		 try {
+		 SSLContext sc = SSLContext.getInstance("SSL");
+		   
+				sc.init(null, trustAllCerts, new java.security.SecureRandom());
+				 HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+			} catch (KeyManagementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		   
+	 }
+	 
 	 
 	  public static TrustManager[] trustAllCerts = new TrustManager[] {
 	    	    new X509TrustManager() {
@@ -69,6 +73,5 @@ public class vHackAPIBuilder {
 	    	        }
 	    	    }
 	    	};
-
 
 }
