@@ -33,19 +33,19 @@ public class vHackAPI {
 	 }	
 
 	public String getStats(Stats stat) {
-	        if(stats == null){
-			try {
-				TimeUnit.MILLISECONDS.sleep(200);
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
-		  	stats = Utils.JSONRequest("user::::pass::::uhash", username + "::::" + password + "::::" + userHash, "vh_update.php");
+		if(stats == null){
+			forceFetchStats();
 		}
 		return stats.getString(stat.toString());
 	}
 	
-	public void refreshStats() {
-		stats = null;
+	public void forceFetchStats() {
+		try {
+			TimeUnit.MILLISECONDS.sleep(200);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+		stats = Utils.JSONRequest("user::::pass::::uhash", username + "::::" + password + "::::" + userHash, "vh_update.php");
 	}
 	
 	public PackageOpener getPackageOpener() {
