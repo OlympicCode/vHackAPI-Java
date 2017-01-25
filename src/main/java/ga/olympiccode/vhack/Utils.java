@@ -1,4 +1,4 @@
-package me.checkium.vhackapi;
+package ga.olympiccode.vhack;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,6 +9,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,7 +50,7 @@ public class Utils {
      * @return The String representation of data the buffered reader contains.
      * @throws IOException  If an I/O error occurs
      */
-    public static String readJson(Reader rd) throws IOException {
+    public static String readResponse(Reader rd) throws IOException {
         StringBuilder sb = new StringBuilder();
         int cp;
         while ((cp = rd.read()) != -1) {
@@ -68,14 +69,14 @@ public class Utils {
      *               Every request, except the very first one, should include "user::::pass::::uhash".<br>
      *               Example: "user::::pass::::uhash::::global" (taken from Console.getIP)
      * @param data The data for the params that you passed in. They are also separated by "::::". You can just concatanate the parts of this.<br>
-     *             Example: "vHackAPI::::123456::::aaaabbbbccccddddeeeeffffgggghhhhiiiijjjjkkkkllllmmmmnnnnoooopppp::::1"
+     *             Example: "username::::password::::uhash::::1"
      * @param php This is the api endpoint that the request will be sent to. In the case of the vHackAPI it are php documents.<br>
      *            Example "vh_network.php"
      * @return The resulte Json as a JSONObject. Errors are thrown if user/password is wrong and (possibly) if the api url changed. null is returned if there are other errors.
      */
     public static JSONObject JSONRequest(String format, String data, String php){
     	JSONObject json = null;
-    	String jsonText = StringRequest(format, data, php);
+    	String jsonText = RawRequest(format, data, php);
 		if("".equals(jsonText))
 		{
 			throw new RuntimeException("Old API URL");
@@ -103,22 +104,33 @@ public class Utils {
      *             Example: "vHackAPI::::123456::::aaaabbbbccccddddeeeeffffgggghhhhiiiijjjjkkkkllllmmmmnnnnoooopppp::::1"
      * @param php This is the api endpoint that the request will be sent to. In the case of the vHackAPI it are php documents.<br>
      *            Example "vh_network.php"
-     * @return The resulte Json as a String.
+     * @return Text from response
      */
-    public static String StringRequest(String format, String data, String php)
+    public static String RawRequest(String format, String data, String php)
     {
     	System.setProperty("http.agent", "Chrome");
     	
-   		String jsonText = null;
+   		String response = null;
    		InputStream is;
    		try {
    			is = new URL(Utils.generateURL(format, data, php)).openStream();
    			BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-   			jsonText = Utils.readJson(rd);
+   			response = Utils.readResponse(rd);
    		} catch (IOException e) {
                e.printStackTrace();
    		}
-   		return jsonText;
+   		if("".equals(response))
+		{
+			throw new RuntimeException("Old API URL");
+		}
+		else if("8".equals(response))
+		{
+			throw new RuntimeException("Wrong Password/User");
+		}
+		else if (response.length() == 1) {
+			return null;
+		}
+   		return response;
     }
 
     private static byte[] m9179a(byte[] arrby, int n2, int n3, byte[] arrby2, int n4, byte[] arrby3) {
@@ -274,6 +286,18 @@ public class Utils {
         String str7 = generateUser(bytes4, 0, bytes4.length, byt, false);
         String str8 = hashString(hashString(a3 + hashString(hashString(str9) + str7)));
         return url + php + "?user=" + a + "&pass=" + str8;
+    }
+   /**
+    * Used internally to delay requests
+    * @param ms How long to delay
+    */
+    public static void delay(long ms) {
+    	try {
+			TimeUnit.MILLISECONDS.wait(ms);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
 }
