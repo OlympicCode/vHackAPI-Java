@@ -7,6 +7,7 @@ public class TransferResult {
 
     protected boolean success;
     protected int moneyamount;
+    protected int newmoney; /* Cash Balance */
     protected int rep;
     protected String Ip;
 
@@ -22,6 +23,14 @@ public class TransferResult {
         if (!success) return;
         try {
             moneyamount = result.getInt("amount");
+            } catch (JSONException e) {
+            System.out.println(result);
+            e.printStackTrace();
+        }
+        /* Player Cash Balance */
+        if (!success) return;
+        try {
+            newmoney = result.getInt("newmoney");
         } catch (JSONException e) {
             System.out.println(result);
             e.printStackTrace();
@@ -30,7 +39,7 @@ public class TransferResult {
             rep = result.getInt("eloch");
          
     }
-
+	
     public boolean getSuccess() {
         return success;
     }
@@ -39,8 +48,13 @@ public class TransferResult {
         return Ip;
     }
 
-    public int getMoneyAmount() {
-        return moneyamount;
+    public int getMoneyAmount() { 
+        return moneyamount; 
+    }
+    
+    /* getNewMoney returns Player Cash Balance */
+    public int getNewMoney() { 
+        return newmoney;
     }
 
     public int getRep() {
