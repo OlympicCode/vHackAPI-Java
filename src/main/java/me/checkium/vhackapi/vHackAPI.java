@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import org.json.JSONObject;
 
 import me.checkium.vhackapi.Spyware.SpywareManager;
+import me.checkium.vhackapi.botnet.BotnetManager;
 import me.checkium.vhackapi.chat.Chat;
 import me.checkium.vhackapi.console.Console;
 import me.checkium.vhackapi.others.PackageOpener;
@@ -30,7 +31,12 @@ public class vHackAPI {
 	 public SpywareManager getSpywareManager() {
 		 SpywareManager manager = new SpywareManager(username, password, userHash);
 		 return manager;
-	 }	
+	 }
+	 
+	 public BotnetManager getBotnetManager() {
+		 BotnetManager manager = new BotnetManager(username, password, userHash);
+		 return manager;
+	 }
 
 	public String getStats(Stats stat) {
 	 	fetchStats();
