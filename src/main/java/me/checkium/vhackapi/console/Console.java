@@ -1,8 +1,7 @@
 package me.checkium.vhackapi.console;
 
-import java.io.*;
-import java.net.URL;
-import java.nio.charset.Charset;
+import java.io.BufferedReader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -75,6 +74,7 @@ public class Console {
 		return result;
 	}
 
+	@SuppressWarnings("unused")
 	public ScannedNode scanIP(String ip) {
         ScannedNode result = null;
 
