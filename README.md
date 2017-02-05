@@ -1,4 +1,4 @@
-,# vHackAPI-Java
+# vHackAPI-Java
 
 #### 1.0 Work has started, follow the progress by [clicking here](https://github.com/vHack-API/vHackAPI-Java/projects/2)
 
