@@ -37,6 +37,8 @@ public class Utils {
      * Unknown - maybe the charset?
      */
     private static final byte[] byt;
+    
+    public static boolean debug = false;
 
     static {
         assertionstatus = !Utils.class.desiredAssertionStatus();
@@ -113,6 +115,12 @@ public class Utils {
    		InputStream is;
    		try {
    			is = new URL(Utils.generateURL(format, data, php)).openStream();
+   			if(debug == true){
+   				
+   				URL url = new URL(Utils.generateURL(format, data, php));
+   				System.out.println(url.toString());
+   				
+   			}
    			BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
    			jsonText = Utils.readJson(rd);
    		} catch (IOException e) {
