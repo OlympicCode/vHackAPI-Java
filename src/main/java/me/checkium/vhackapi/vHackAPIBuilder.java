@@ -48,7 +48,7 @@ public class vHackAPIBuilder {
      * @param proxyUrl  The proxy's IP/URL
      * @param proxyPort The proxy's port
      */
-    public static void useProxy(String proxyUrl, int proxyPort){
+    public vHackAPIBuilder useProxy(String proxyUrl, int proxyPort){
     	
     	System.setProperty("http.proxyHost", proxyUrl);
     	System.setProperty("http.proxyPort", String.valueOf(proxyPort));
@@ -62,7 +62,7 @@ public class vHackAPIBuilder {
      * @param username  The proxy's username
      * @param password  The proxy's password
      */
-    public static void useProxy(String proxyUrl, int proxyPort, String username, String password){
+    public vHackAPIBuilder useProxy(String proxyUrl, int proxyPort, String username, String password){
     	
     	System.setProperty("http.proxyHost", proxyUrl);
     	System.setProperty("http.proxyPort", String.valueOf(proxyPort));
