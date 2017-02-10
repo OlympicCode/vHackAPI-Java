@@ -52,7 +52,7 @@ public class vHackAPIBuilder {
     	
     	System.setProperty("http.proxyHost", proxyUrl);
     	System.setProperty("http.proxyPort", String.valueOf(proxyPort));
-    	
+    	return this;
     }
 
     /**
@@ -68,7 +68,7 @@ public class vHackAPIBuilder {
     	System.setProperty("http.proxyPort", String.valueOf(proxyPort));
     	System.setProperty("http.proxyUser", username);
     	System.setProperty("http.proxyPassword", password);
-    	
+    	return this;
     }
 	 
 	 public vHackAPI getAPI() {
