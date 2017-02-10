@@ -17,14 +17,13 @@ public class Bot {
 		this.username = username;
 		this.password = password;
 		this.userHash = userHash;
-		BotnetManager.getInfo();
 		getBotInfo();
 		
 	}
 	protected void getBotInfo(){
 		
 		JSONArray botsInfo = BotnetManager.botnetInfo.getJSONArray("data");
-		JSONObject botInfo = botsInfo.getJSONObject(--bID);
+		JSONObject botInfo = botsInfo.getJSONObject(bID - 1);
 		this.botInfo = botInfo;
 		
 	}
@@ -47,9 +46,16 @@ public class Bot {
 		
 	}
 	
+	public void refreshBotnetInfo(){
+		
+		BotnetManager.getInfo();
+		
+	}
+	
 	public void update(){
 		
 		Utils.JSONRequest("user::::pass::::uhash::::bID", username + "::::" + password + "::::" + userHash + "::::" + bID, "vh_upgradeBotnet.php");
+		refreshBotnetInfo();
 		getBotInfo();
 		
 	}

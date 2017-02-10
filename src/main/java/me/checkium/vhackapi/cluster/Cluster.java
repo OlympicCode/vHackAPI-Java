@@ -79,6 +79,13 @@ public class Cluster {
 		
 	}
 	
+	public void manageClusterRequest(int decision, ClusterMember applicant){
+		
+		Utils.StringRequest("user::::pass::::uhash::::decision::::uid", ClusterManager.username + "::::" + ClusterManager.password + "::::" + ClusterManager.uhash + "::::" + decision + "::::" + applicant.getID(), "vh_clusterDecision");
+		//Seems to return 0,1,2,5,10,12
+		
+	}
+	
 	public void kickClusterMember(ClusterMember m){
 		
 		try{
@@ -122,25 +129,19 @@ public class Cluster {
 		
 	}
 	
-	//Too slow, needs working
-	/*public String[] getClusterMessages(){
+	public JSONObject[] getClusterMessages(){
 
 		JSONArray messagesArray = cData.getJSONArray("messages");
-		String[] messages = new String[messagesArray.length() - 1];
+		JSONObject[] messages = new JSONObject[messagesArray.length()];
 		for(int i = (messagesArray.length() - 1); i >= 0; i--){
 			
-			int i2 = 0;
 			JSONObject messageRaw = messagesArray.getJSONObject(i);
-			String dateAuthor = messageRaw.getString("from");
-			String message = messageRaw.getString("message");
-			String format = dateAuthor + ": " + message;
-			messages[i2] = format;
-			i++;
+			messages[i] = messageRaw;
 			
 		}
 		return messages;
 		
-	}*/
+	}
 	
 	public void chat(String msg){
 		
