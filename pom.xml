@@ -4,16 +4,46 @@
   <artifactId>vhack</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>VHackAPI</name>
+  <repositories>
+    <repository>
+      <id>oss.sonatype.org</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </repository>
+  </repositories>
   <dependencies>
-  <dependency>
-    <groupId>org.json</groupId>
-    <artifactId>json</artifactId>
-    <version>20160810</version>
-</dependency>
-  
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20160810</version>
+    </dependency>
+    <dependency>
+      <groupId>com.jcabi</groupId>
+      <artifactId>jcabi-aspects</artifactId>
+      <version>0.22.6</version>
+    </dependency>
   </dependencies>
-    <properties>
+  <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

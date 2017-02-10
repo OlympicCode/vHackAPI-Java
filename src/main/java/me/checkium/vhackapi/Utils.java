@@ -13,7 +13,11 @@ import java.security.NoSuchAlgorithmException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.jcabi.aspects.Async;
+
 public class Utils {
+	
+	private static String jText = null;
     /**
      * The url of the current api.<br>
      * As of now it is {@value url}.
@@ -107,26 +111,54 @@ public class Utils {
      *            Example "vh_network.php"
      * @return The resulte Json as a String.
      */
+    @Async
     public static String StringRequest(String format, String data, String php)
     {
+
     	System.setProperty("http.agent", "Chrome");
+    	InputStream is;
+    	try {
+    		is = new URL(Utils.generateURL(format, data, php)).openStream();
+    		if(debug == true){
+   				
+    			URL url = new URL(Utils.generateURL(format, data, php));
+    			System.out.println(url.toString());
+    			
+    		}
+    		BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+    		jText = Utils.readJson(rd);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return jText;
+    }
+    
+    /**
+     * Sets a proxy for the system
+     * @param proxyUrl  The proxy's IP/URL
+     * @param proxyPort The proxy's port
+     */
+    public static void useProxy(String proxyUrl, int proxyPort){
     	
-   		String jsonText = null;
-   		InputStream is;
-   		try {
-   			is = new URL(Utils.generateURL(format, data, php)).openStream();
-   			if(debug == true){
-   				
-   				URL url = new URL(Utils.generateURL(format, data, php));
-   				System.out.println(url.toString());
-   				
-   			}
-   			BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-   			jsonText = Utils.readJson(rd);
-   		} catch (IOException e) {
-               e.printStackTrace();
-   		}
-   		return jsonText;
+    	System.setProperty("http.proxyHost", proxyUrl);
+    	System.setProperty("http.proxyPort", String.valueOf(proxyPort));
+    	
+    }
+
+    /**
+     * Sets a proxy that requires auth for the system
+     * @param proxyUrl  The proxy's IP/URL
+     * @param proxyPort The proxy's port
+     * @param username  The proxy's username
+     * @param password  The proxy's password
+     */
+    public static void useProxy(String proxyUrl, int proxyPort, String username, String password){
+    	
+    	System.setProperty("http.proxyHost", proxyUrl);
+    	System.setProperty("http.proxyPort", String.valueOf(proxyPort));
+    	System.setProperty("http.proxyUser", username);
+    	System.setProperty("http.proxyPassword", password);
+    	
     }
 
     private static byte[] m9179a(byte[] arrby, int n2, int n3, byte[] arrby2, int n4, byte[] arrby3) {

@@ -28,6 +28,18 @@ public class BotnetManager {
 		return bot;
 	}
 	
+	public Bot[] getBots(){
+		
+		Bot[] bots = new Bot[getBotCount()];
+		for(int i = 0; i < getBotCount(); i++){
+			
+			bots[i] = getBot(i + 1);
+			
+		}
+		return bots;
+		
+	}
+	
 	public int getBotCount(){
 		
 		return botnetInfo.getInt("count");
