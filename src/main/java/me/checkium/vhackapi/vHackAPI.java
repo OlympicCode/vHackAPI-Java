@@ -9,7 +9,7 @@ import me.checkium.vhackapi.botnet.BotnetManager;
 import me.checkium.vhackapi.chat.Chat;
 import me.checkium.vhackapi.cluster.ClusterManager;
 import me.checkium.vhackapi.console.Console;
-import me.checkium.vhackapi.others.PackageOpener;
+import me.checkium.vhackapi.packages.PackageManager;
 import me.checkium.vhackapi.upgrades.UpgradeManager;
 
 public class vHackAPI {
@@ -43,6 +43,12 @@ public class vHackAPI {
 		 ClusterManager manager = new ClusterManager(username, password, userHash);
 		 return manager;
 	 }
+	 
+
+	public PackageManager getPackageManager() {
+		PackageManager packageOpener = new PackageManager(username, password, userHash, this);
+		return packageOpener;
+	}
 
 	public String getStats(Stats stat) {
 	 	fetchStats();
@@ -64,11 +70,6 @@ public class vHackAPI {
 			e1.printStackTrace();
 		}
 		stats = Utils.JSONRequest("user::::pass::::uhash", username + "::::" + password + "::::" + userHash, "vh_update.php");
-	}
-	
-	public PackageOpener getPackageOpener() {
-		PackageOpener packageOpener = new PackageOpener(username, password, userHash);
-		return packageOpener;
 	}
 	
 	public String getUsername(){
