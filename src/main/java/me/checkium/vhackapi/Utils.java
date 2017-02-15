@@ -9,15 +9,17 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 
-import com.jcabi.aspects.Async;
 
 public class Utils {
-	
-	private static String jText = null;
+
     /**
      * The url of the current api.<br>
      * As of now it is {@value url}.
@@ -81,9 +83,31 @@ public class Utils {
      */
     public static JSONObject JSONRequest(String format, String data, String php){
     	JSONObject json = null;
-    	String jsonText = StringRequest(format, data, php);
-		if("".equals(jsonText))
-		{
+    	Future<String> jsonTextC = Request(format, data, php);
+    	String jsonText = "";
+    	try{
+    		if(jsonTextC.isDone() /*|| jsonTextC.get() != ""*/){
+
+    			jsonText = jsonTextC.get(2000, TimeUnit.MILLISECONDS);
+    		
+    		} else {
+    		
+    			Thread.sleep(1000);
+    			jsonText = jsonTextC.get(2000, TimeUnit.MILLISECONDS);
+    		
+    		}
+    	} catch(Exception e) {    	
+    		
+    		try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e1) {
+				
+			}
+    		JSONRequest(format,data,php);
+    		
+    	}
+    	if("".equals(jsonText))
+    	{
 			throw new RuntimeException("Old API URL");
 		}
 		else if("8".equals(jsonText))
@@ -109,12 +133,14 @@ public class Utils {
      *             Example: "vHackAPI::::123456::::aaaabbbbccccddddeeeeffffgggghhhhiiiijjjjkkkkllllmmmmnnnnoooopppp::::1"
      * @param php This is the api endpoint that the request will be sent to. In the case of the vHackAPI it are php documents.<br>
      *            Example "vh_network.php"
-     * @return The resulte Json as a String.
+     * @return The resulte Json as a Future<String>.
      */
+    //JDOC needs rewriting
     @Async
-    public static String StringRequest(String format, String data, String php)
+    public static Future<String> Request(String format, String data, String php)
     {
 
+    	Future<String> jText;
     	System.setProperty("http.agent", "Chrome");
     	InputStream is;
     	try {
@@ -125,12 +151,74 @@ public class Utils {
     			System.out.println(url.toString());
     			
     		}
+    		Thread.sleep(1000);
     		BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-    		jText = Utils.readJson(rd);
+    		jText = new AsyncResult<String>(Utils.readJson(rd));
+    		return jText;
     	} catch (Exception e) {
-    		e.printStackTrace();
+    		try {
+    			Thread.sleep(1000);
+    		} catch (InterruptedException e1) {
+    			e1.printStackTrace();
+    		}
+    		Request(format,data,php);
     	}
-    	return jText;
+    	return null;
+    }
+    
+    public static String StringRequest(String format, String data, String php)
+    {
+    	
+    	Future<String> jsonTextC = Request(format, data, php);
+    	String jsonText = "";
+    	try{
+    		if(jsonTextC.isDone()){
+    		
+    			jsonText = jsonTextC.get();
+    			return jsonText;
+    			
+    		} else {
+
+    			Thread.sleep(1000);
+    			jsonText = jsonTextC.get(1000, TimeUnit.MILLISECONDS);
+    			return jsonText;
+    			
+    		}
+    	} catch(Exception e) {    	
+    		
+    		StringRequest(format,data,php);
+    		
+    	}
+    	return null;
+    	
+    }
+    
+    /**
+     * Sets a proxy for the system
+     * @param proxyUrl  The proxy's IP/URL
+     * @param proxyPort The proxy's port
+     */
+    public static void useProxy(String proxyUrl, int proxyPort){
+    	
+    	System.setProperty("http.proxyHost", proxyUrl);
+    	System.setProperty("http.proxyPort", String.valueOf(proxyPort));
+    	
+    }
+
+    /**
+     * Sets a proxy that requires auth for the system
+     * @param proxyUrl  The proxy's IP/URL
+     * @param proxyPort The proxy's port
+     * @param username  The proxy's username
+     * @param password  The proxy's password
+     */
+    public static void useProxy(String proxyUrl, int proxyPort, String username, String password){
+    	
+    	System.setProperty("http.proxyHost", proxyUrl);
+    	System.setProperty("http.proxyPort", String.valueOf(proxyPort));
+    	System.setProperty("http.proxyUser", username);
+    	System.setProperty("http.proxyPassword", password);
+    	
     }
 
     private static byte[] m9179a(byte[] arrby, int n2, int n3, byte[] arrby2, int n4, byte[] arrby3) {

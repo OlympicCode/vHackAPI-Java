@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -74,20 +73,20 @@ public class Console {
 		return result;
 	}
 
-	@SuppressWarnings("unused")
 	public ScannedNode scanIP(String ip) {
         ScannedNode result = null;
 
-		System.out.println("scanning " + ip);
+		System.out.println("Scanning [" + ip + "]");
 
-        try {
+        /*try {
 			TimeUnit.MILLISECONDS.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
+        //IDK Why it's here.... it makes the scan slower
 		String resultString = Utils.StringRequest("user::::pass::::target", username + "::::" + password + "::::" + ip, "vh_scan.php");
-        String[] tempParsedResultString = parseScanResult(Utils.StringRequest("user::::pass::::target", username + "::::" + password + "::::" + ip, "vh_scan.php"));
+        String[] tempParsedResultString = parseScanResult(Utils.StringRequest("user::::pass::::target", username + "::::" + password + "::::" + ip, "vh_scan.php")); */
         result = new ScannedNode(parseScanResult(Utils.StringRequest("user::::pass::::target", username + "::::" + password + "::::" + ip, "vh_scan.php")));
         result.setIP(ip);
 
@@ -103,12 +102,12 @@ public class Console {
     }
 
     public TransferResult transferTrojanTo(ScannedNode node) throws JSONException {
-		System.out.println("transfering " + node.getIP());
-		try {
+		System.out.println("Transfering trojan [" + node.getIP() + "]");
+		/*try {
 			TimeUnit.MILLISECONDS.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}
+		}*/
 
         JSONObject json = Utils.JSONRequest("user::::pass::::uhash::::target", username + "::::" + password + "::::" + userHash + "::::" + node.getIP(), "vh_trTransfer.php");
 
