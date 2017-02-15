@@ -97,7 +97,8 @@ public class Utils {
     			JSONObject json = null;
     			jsonTextC = Request(format, data, php);
     			String jsonText = "";
-    			executor.submit(task);
+			if(task != null)
+    				executor.submit(task);
     			try{
     		
     				jsonText = jsonTextC.get();
