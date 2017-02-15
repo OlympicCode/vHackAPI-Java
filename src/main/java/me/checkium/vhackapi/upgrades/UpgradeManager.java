@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import me.checkium.vhackapi.Utils;
@@ -24,11 +23,6 @@ public class UpgradeManager {
 	public UpgradeResult addUpdate(UpgradeType type) {
 		
 		JSONObject json = new JSONObject();
-		try {
-	    TimeUnit.MILLISECONDS.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 		json = Utils.JSONRequest("user::::pass::::uhash::::utype", username + "::::" + password + "::::" + userHash + "::::" + type.toString(), "vh_addUpdate.php");
 		int result = json.getInt("result");
 		if (result == 1) {
@@ -47,29 +41,14 @@ public class UpgradeManager {
 	public ArrayList<Task> getTasks() {
 		ArrayList<Task> array = new ArrayList<Task>();
 		JSONObject json = new JSONObject();
-		try {
-	    TimeUnit.MILLISECONDS.sleep(100);
-
-		  JSONArray arrayy;
-		 try {
-			 json = Utils.JSONRequest("user::::pass::::uhash", username + "::::" + password + "::::" + userHash, "vh_tasks.php");
-	   
-	     
-	    	 arrayy = json.getJSONArray("data");
-	     } catch (JSONException e) {
-	    	 return array;
-	     }
-	     
-	     for (int i = 0; i < arrayy.length(); i++) {
-	    	 JSONObject object = arrayy.getJSONObject(i);
-	    	 Task task = new Task(object);
-	    	 array.add(task);
-		}
-	    
-	    
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		JSONArray arrayy;
+	    json = Utils.JSONRequest("user::::pass::::uhash", username + "::::" + password + "::::" + userHash, "vh_tasks.php");
+	    arrayy = json.getJSONArray("data");
+	    for (int i = 0; i < arrayy.length(); i++) {
+	    	JSONObject object = arrayy.getJSONObject(i);
+	    	Task task = new Task(object);
+	    	array.add(task);
+	    }
 		return array;
 	}
 	

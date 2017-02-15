@@ -9,10 +9,10 @@ public class TransferResult {
     protected int moneyamount;
     protected int repgained;
     protected int replost;
-    protected String Ip;
+    protected String ip;
 
-    public TransferResult(JSONObject result, String IP) throws JSONException {
-        Ip = IP;
+    public TransferResult(JSONObject result, String ip) throws JSONException {
+        this.ip = ip;
         success = result.getString("result").contains("0");
         if (!success) return;
         try {
@@ -35,7 +35,7 @@ public class TransferResult {
     }
 
     public String getTarget() {
-        return Ip;
+        return ip;
     }
 
     public int getMoneyAmount() {
