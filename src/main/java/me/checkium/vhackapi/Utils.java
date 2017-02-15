@@ -9,17 +9,21 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 
 
 public class Utils {
 
+	private static WaitingTask task;
+	private static ExecutorService executor;
+	public static Future<String> jsonTextC;
     /**
      * The url of the current api.<br>
      * As of now it is {@value url}.
@@ -80,45 +84,56 @@ public class Utils {
      * @param php This is the api endpoint that the request will be sent to. In the case of the vHackAPI it are php documents.<br>
      *            Example "vh_network.php"
      * @return The resulte Json as a JSONObject. Errors are thrown if user/password is wrong and (possibly) if the api url changed. null is returned if there are other errors.
+     * @throws ExecutionException 
+     * @throws InterruptedException 
      */
     public static JSONObject JSONRequest(String format, String data, String php){
-    	JSONObject json = null;
-    	Future<String> jsonTextC = Request(format, data, php);
-    	String jsonText = "";
-    	try{
-    		if(jsonTextC.isDone() /*|| jsonTextC.get() != ""*/){
 
-    			jsonText = jsonTextC.get(2000, TimeUnit.MILLISECONDS);
+    	executor = Executors.newFixedThreadPool(3);
+    	Future<JSONObject> cmsoon = executor.submit(new Callable<JSONObject>(){
     		
-    		} else {
+    		@Override
+    		public JSONObject call(){
+    			JSONObject json = null;
+    			jsonTextC = Request(format, data, php);
+    			String jsonText = "";
+			if(task != null)
+    				executor.submit(task);
+    			try{
     		
-    			Thread.sleep(1000);
-    			jsonText = jsonTextC.get(2000, TimeUnit.MILLISECONDS);
+    				jsonText = jsonTextC.get();
+    			
+    			} catch(Exception e) {    	
     		
-    		}
-    	} catch(Exception e) {    	
-    		
-    		try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e1) {
+    				try {
+    					Thread.sleep(1000);
+    				} catch (InterruptedException e1) {
 				
-			}
-    		JSONRequest(format,data,php);
+    				}
+    				JSONRequest(format,data,php);
     		
-    	}
-    	if("".equals(jsonText))
-    	{
-			throw new RuntimeException("Old API URL");
+    			}
+    			if("".equals(jsonText))
+    			{
+    				throw new RuntimeException("Old API URL");
+    			}
+    			else if("8".equals(jsonText))
+    			{
+    				throw new RuntimeException("Wrong Password/User");
+    			}
+    			else if (jsonText.length() == 1) {
+    				return null;
+    			}
+    			json = new JSONObject(jsonText);
+    			return json;
+    		}
+    	});
+    	try {
+			return cmsoon.get();
+		} catch (Exception e){
+			JSONRequest(format,data,php);
 		}
-		else if("8".equals(jsonText))
-		{
-			throw new RuntimeException("Wrong Password/User");
-		}
-		else if (jsonText.length() == 1) {
-			return null;
-		}
-		json = new JSONObject(jsonText);
-		return json;
+    	return null;
 	}
 
     //it'll just do the request without any checks
@@ -136,59 +151,71 @@ public class Utils {
      * @return The resulte Json as a Future<String>.
      */
     //JDOC needs rewriting
-    @Async
     public static Future<String> Request(String format, String data, String php)
     {
-
-    	Future<String> jText;
-    	System.setProperty("http.agent", "Chrome");
-    	InputStream is;
-    	try {
-    		is = new URL(Utils.generateURL(format, data, php)).openStream();
-    		if(debug == true){
+    	
+    	Future<String> result = executor.submit(new Callable<String>(){
+    		@Override
+    		public String call() {
+    			String jText;
+    			System.setProperty("http.agent", "Chrome");
+    			InputStream is;
+    			try {
+    				is = new URL(Utils.generateURL(format, data, php)).openStream();
+    				if(debug == true){
    				
-    			URL url = new URL(Utils.generateURL(format, data, php));
-    			System.out.println(url.toString());
+    					URL url = new URL(Utils.generateURL(format, data, php));
+    					System.out.println(url.toString());
     			
+    				}
+    				Thread.sleep(1000);
+    				BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+    				jText = Utils.readJson(rd);
+    				return jText;
+    			} catch (Exception e) {
+    				try {
+    					Thread.sleep(1000);
+    				} catch (InterruptedException e1) {
+    					e1.printStackTrace();
+    				}
+    				Request(format,data,php);
+    			}
+    	
+    			return null;
     		}
-    		Thread.sleep(1000);
-    		BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-    		jText = new AsyncResult<String>(Utils.readJson(rd));
-    		return jText;
-    	} catch (Exception e) {
-    		try {
-    			Thread.sleep(1000);
-    		} catch (InterruptedException e1) {
-    			e1.printStackTrace();
-    		}
-    		Request(format,data,php);
-    	}
-    	return null;
+    	});
+    	return result;
     }
     
     public static String StringRequest(String format, String data, String php)
     {
-    	
-    	Future<String> jsonTextC = Request(format, data, php);
-    	String jsonText = "";
-    	try{
-    		if(jsonTextC.isDone()){
+    	Future<String> cmsoon = executor.submit(new Callable<String>(){
+    		@Override
+    		public String call() {
+    			jsonTextC = Request(format, data, php);
+    			String jsonText = "";
+    				try{
+    					jsonText = jsonTextC.get();
+    					return jsonText;
+    			
+    				} catch(Exception e) {    	
     		
-    			jsonText = jsonTextC.get();
-    			return jsonText;
-    			
-    		} else {
-
-    			Thread.sleep(1000);
-    			jsonText = jsonTextC.get(1000, TimeUnit.MILLISECONDS);
-    			return jsonText;
-    			
+    					try {
+    						Thread.sleep(1000);
+    					} catch (InterruptedException e1) {
+				
+    					}
+    					StringRequest(format,data,php);
+    		
+    				}
+    				return null;
     		}
-    	} catch(Exception e) {    	
-    		
-    		StringRequest(format,data,php);
-    		
-    	}
+    	});
+    	try {
+			return cmsoon.get();
+		} catch (Exception e){
+			StringRequest(format,data,php);
+		}
     	return null;
     	
     }
@@ -205,6 +232,12 @@ public class Utils {
     	
     }
 
+    public static <T extends WaitingTask> void setWaitingTask(T wt){
+    	
+    	task = wt;
+    	
+    }
+    
     /**
      * Sets a proxy that requires auth for the system
      * @param proxyUrl  The proxy's IP/URL
