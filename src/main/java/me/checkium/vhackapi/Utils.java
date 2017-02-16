@@ -219,38 +219,10 @@ public class Utils {
     	return null;
     	
     }
-    
-    /**
-     * Sets a proxy for the system
-     * @param proxyUrl  The proxy's IP/URL
-     * @param proxyPort The proxy's port
-     */
-    public static void useProxy(String proxyUrl, int proxyPort){
-    	
-    	System.setProperty("http.proxyHost", proxyUrl);
-    	System.setProperty("http.proxyPort", String.valueOf(proxyPort));
-    	
-    }
 
     public static <T extends WaitingTask> void setWaitingTask(T wt){
     	
     	task = wt;
-    	
-    }
-    
-    /**
-     * Sets a proxy that requires auth for the system
-     * @param proxyUrl  The proxy's IP/URL
-     * @param proxyPort The proxy's port
-     * @param username  The proxy's username
-     * @param password  The proxy's password
-     */
-    public static void useProxy(String proxyUrl, int proxyPort, String username, String password){
-    	
-    	System.setProperty("http.proxyHost", proxyUrl);
-    	System.setProperty("http.proxyPort", String.valueOf(proxyPort));
-    	System.setProperty("http.proxyUser", username);
-    	System.setProperty("http.proxyPassword", password);
     	
     }
 
