@@ -1,5 +1,8 @@
 package me.checkium.vhackapi;
 
+import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.TesseractException;
+
 import javax.imageio.ImageIO;
 import javax.xml.bind.DatatypeConverter;
 import java.awt.image.BufferedImage;
@@ -12,11 +15,13 @@ import java.io.IOException;
 public class ScannedImage {
 
     private BufferedImage image;
+    private String ocrString;
 
-    public ScannedImage(String base64String) throws IOException {
+    public ScannedImage(String base64String) throws IOException, TesseractException {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(DatatypeConverter.parseBase64Binary(base64String));
         image = ImageIO.read(byteArrayInputStream);
         byteArrayInputStream.close();
+        ocrString = (new Tesseract()).doOCR(image);
     }
 
     public ScannedImage(BufferedImage image)
@@ -33,4 +38,8 @@ public class ScannedImage {
         return red == 136 && green == 0 && blue == 0;
     }
 
+    public String getOCRString()
+    {
+        return ocrString;
+    }
 }
