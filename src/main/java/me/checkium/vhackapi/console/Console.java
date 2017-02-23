@@ -110,7 +110,7 @@ public class Console {
 		return "0".equals(result);
     }
 
-	public TransferResult transferMoneyIP(String ip) {
+	public TransferResult transferMoney(String ip) {
 		TransferResult result = null;
 		JSONObject json = Utils.JSONRequest("user::::pass::::target", username + "::::" + password + "::::" + ip, "vh_trTransfer.php");
 		result = new TransferResult(json,ip);
@@ -121,7 +121,7 @@ public class Console {
 		return result;
     }
 	
-	public TransferResult transferMoneyIP(ScannedNode node) {
+	public TransferResult transferMoney(ScannedNode node) {
 		TransferResult result = null;
 		JSONObject json = Utils.JSONRequest("user::::pass::::target", username + "::::" + password + "::::" + node.getIP(), "vh_trTransfer.php");
 		result = new TransferResult(json,node.getIP());
