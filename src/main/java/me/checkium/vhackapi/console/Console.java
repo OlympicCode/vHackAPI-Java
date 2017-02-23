@@ -87,10 +87,21 @@ public class Console {
         //IDK Why it's here.... it makes the scan slower
 		String resultString = Utils.StringRequest("user::::pass::::target", username + "::::" + password + "::::" + ip, "vh_scan.php");
         String[] tempParsedResultString = parseScanResult(Utils.StringRequest("user::::pass::::target", username + "::::" + password + "::::" + ip, "vh_scan.php")); */
-        result = new ScannedNode(parseScanResult(Utils.StringRequest("user::::pass::::target", username + "::::" + password + "::::" + ip, "vh_scan.php")));
+        result = new ScannedNode(parseScanResult(Utils.StringRequest("user::::pass::::target", username + "::::" + password + "::::" + ip, "vh_vulnScan.php")));
         result.setIP(ip);
 
         return result;
+    }
+	
+	public String selectPassword(String passwd) {
+		String result = Utils.StringRequest("user::::pass::::decision", username + "::::" + password + "::::" + passwd, "vh_createConnection.php");
+		/*
+		Result:
+		15 = Wrong Password
+		14 = Already tried
+		0 = Right Password
+		 */
+		return result;
     }
 	
     public ArrayList<ScannedNode> scanIPs(List<String> ips) {
