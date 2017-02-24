@@ -2,6 +2,7 @@ package me.checkium.vhackapi.console;
 
 /**
  * Created by ric on 31/08/16.
+ * Updated by flattern 23/02/17
  */
 public class ScannedNode {
     private String IP;
@@ -15,10 +16,14 @@ public class ScannedNode {
             money,
             anonymous,
             successRep,
+            savings,
             failRep,
+            ipspLevel,
+            spywareLevel,
             successRate;
 
     public ScannedNode(String[] result) {
+    	
         if (result.length == 1) {
             success = false;
             return;
@@ -26,17 +31,69 @@ public class ScannedNode {
         if (result[1] == null) {
             success = false;
         } else {
-            username = result[1].substring(26);
-            firewallLevel = result[2].substring(26);
-            antiVirusLevel = result[3].substring(27);
-            scanLevel = result[4].substring(22);
-            sdkLevel = result[5].substring(21);
-            spamLevel = result[6].substring(22);
-            money = result[7].substring(23);
-            anonymous = result[9].substring(27);
-            successRep = result[11].substring(32);
-            failRep = result[12].substring(29);
-            successRate = result[13].substring(39);
+        	
+        	/*
+        	 * Example
+        	fw:1
+        	av:1
+        	spam:1
+        	sdk:1
+        	ipsp:1
+        	money:154396
+        	savings:0
+        	anonymous:YES
+        	username:Captain_Snacky
+        	winelo:19
+        	winchance:90
+        	spyware:1
+        	ipaddress:242.126.137.253*/
+        	
+        	for (String i1:result)
+        	{
+        		switch (i1.split(":")[0])
+        		{
+        		case "fw":
+        			firewallLevel = i1.split(":")[1];
+        			break;
+        		case "av":
+        			antiVirusLevel = i1.split(":")[1];
+        			break;
+        		case "spam":
+        			spamLevel = i1.split(":")[1];
+        			break;
+        		case "sdk":
+        			sdkLevel = i1.split(":")[1];
+        			break;
+        		case "ipsp":
+        			ipspLevel = i1.split(":")[1];
+        			break;
+        		case "money":
+        			money= i1.split(":")[1];
+        			break;
+        		case "savings":
+        			savings = i1.split(":")[1];
+        			break;
+        		case "anonymous":
+        			anonymous = i1.split(":")[1];
+        			break;
+        		case "username":
+        			username = i1.split(":")[1];
+        			break;
+        		case "winelo":
+        			successRep = i1.split(":")[1];
+        			break;
+        		case "winchance":
+        			successRate = i1.split(":")[1];
+        			break;
+        		case "spyware":
+        			spywareLevel = i1.split(":")[1];
+        			break;
+        		case "ipaddress":
+        			IP = i1.split(":")[1];
+        			break;
+        			
+        		}
+        	}
         }
 
     }
@@ -57,6 +114,23 @@ public class ScannedNode {
         }
     }
 
+    public Integer getSavings() {
+        if (!success) return null;
+        try {
+            return Integer.valueOf(savings);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+    
+    public Integer getIpSpoofingLevel() {
+        if (!success) return null;
+        try {
+            return Integer.valueOf(ipspLevel);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
 
     public Integer getAntiVirusLevel() {
         if (!success) return null;
@@ -77,6 +151,14 @@ public class ScannedNode {
         }
     }
 
+    public Integer getSpywareLevel() {
+        if (!success) return null;
+        try {
+            return Integer.valueOf(spywareLevel);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
 
     public Integer getSdkLevel() {
         if (!success) return null;
@@ -150,19 +232,4 @@ public class ScannedNode {
     public void setIP(String IP) {
         this.IP = IP;
     }
-    /*
-
-    private val success = result[1] != null
-    val username = result[1]?.substring(26)
-    val firewallLevel = result[2]!!.substring(26).toInt()
-    val antiVirusLevel = result[3]!!.substring(27).toInt()
-    val scanLevel = result[4]!!.substring(22).toInt()
-    val sdkLevel = result[5]!!.substring(21).toInt();
-    val spamLevel = result[6]!!.substring(22).toInt();
-    val money = result[7]!!.substring(23).toInt();
-    val anonymous = result[9]!!.substring(27) == "YES";
-    val successRep = result[11]!!.substring(32).toInt();
-    val failRep = result[12]!!.substring(29).toInt();
-    val successRate = result[13]!!.substring(39).replace("%","").toInt();
-     */
 }
