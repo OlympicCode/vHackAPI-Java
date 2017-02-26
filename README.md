@@ -1,6 +1,9 @@
 # vHackAPI-Java
 
-#### 1.0 Work has started, follow the progress by [clicking here](https://github.com/vHack-API/vHackAPI-Java/projects/2)
+### There has been a update lately that was messed things up. Were working on integrating the changes.
+#### [@Qup42](https://github.com/Qup42) works on the OCR part, [@Checkium](https://github.com/checkium) and [@C0mm4nd](https://github.com/C0mm4nd) work on the other changes. Ask them if you have questions or want to help.
+
+##### 1.0 Work has started, follow the progress by [clicking here](https://github.com/vHack-API/vHackAPI-Java/projects/2)
 
 [![Discord](https://img.shields.io/badge/Chat-%20on%20Discord-738bd7.svg?style=flat-square)](https://discord.gg/PHgESQn) [![Build Status](https://img.shields.io/travis/OlympicCode/vHackAPI-Java.svg?style=flat-square)](https://travis-ci.org/OlympicCode/vHackAPI-Java) [![Downloads](https://img.shields.io/github/downloads/OlympicCode/vHackAPI-Java/total.svg?style=flat-square)]() [![GitHub release](https://img.shields.io/github/release/OlympicCode/vHackAPI-Java.svg?style=flat-square)]()
 
