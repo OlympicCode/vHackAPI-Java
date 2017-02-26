@@ -14,13 +14,19 @@ import java.io.IOException;
  */
 public class NetworkImage extends Image{
 
-    public NetworkImage(String base64String) throws IOException, TesseractException {
+    private String hostName = "";
+
+    public NetworkImage(String base64String) throws IOException {
         super(base64String);
+
+        readInHostname();
     }
 
     public NetworkImage(BufferedImage image)
     {
         super(image);
+
+        readInHostname();
     }
 
     private boolean checkRedPixel()
@@ -32,13 +38,39 @@ public class NetworkImage extends Image{
         return red == 136 && green == 0 && blue == 0;
     }
 
+    private void readInHostname() {
+        Letters letters = Letters.getInstance();
+
+        for(int i=0; i<7; i++)
+        {
+            BufferedImage subImage = image.getSubimage(9 * i + 72, 23, 8, 12);
+
+            if(letters.getCharFor(generateHashFor(subImage)) == ' ')
+            {
+                throw new IllegalArgumentException("One of the characters is unkown at the moment. Plese send the base64 string to us so that we cam add it");
+            }
+            else
+            {
+                hostName += letters.getCharFor(generateHashFor(subImage));
+            }
+        }
+    }
+
     private boolean checkOCRString()
     {
-       return (ocrString.contains("Matched by the FBI") || ocrString.contains("Watched by the FBI"));
+        //return true for now because the ocr functionality still needs to be reimplemented
+        return true;
+       //return (ocrString.contains("Matched by the FBI") || ocrString.contains("Watched by the FBI"));
     }
+
     public boolean checkForAnonymity()
     {
-        return checkOCRString() && checkRedPixel();
+        return checkRedPixel();
+    }
+
+    public String getHostName()
+    {
+        return "XT-"+hostName+".vhack.cc";
     }
 
 }

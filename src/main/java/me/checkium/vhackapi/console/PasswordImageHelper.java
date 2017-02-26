@@ -18,11 +18,11 @@ public class PasswordImageHelper {
     Pattern patternSecret;
     PasswordImage[] passwordImages = new PasswordImage[4];
 
-    public PasswordImageHelper(String vulnScanResultString) throws IOException, TesseractException {
+    public PasswordImageHelper(String vulnScanResultString) throws IOException {
         this(new JSONObject(vulnScanResultString));
     }
 
-    public PasswordImageHelper(JSONObject result) throws IOException, TesseractException {
+    public PasswordImageHelper(JSONObject result) throws IOException {
         secret = result.getString("secret");
         patternSecret = Pattern.compile(secret.replace("*", ".{1}"));
 
