@@ -1,6 +1,5 @@
 package me.checkium.vhackapi.console;
 
-
 import javax.imageio.ImageIO;
 import javax.xml.bind.DatatypeConverter;
 import java.awt.image.BufferedImage;
@@ -8,9 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 
-/**
- * Created by Julian Mundhahs on 23.02.2017.
- */
+//TODO: cleanup code
 public abstract class Image {
 
     BufferedImage image;

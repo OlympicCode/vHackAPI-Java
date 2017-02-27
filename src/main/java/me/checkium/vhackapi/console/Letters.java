@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.HashMap;
 
 //TODO: move to a suitable package -> eg. OCR
+//TODO: cleanup code
 public class Letters {
 
     private static HashMap<BigInteger, Character> table;

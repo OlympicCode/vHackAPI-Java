@@ -3,6 +3,7 @@ package me.checkium.vhackapi.console;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+//TODO: cleanup code
 public class NetworkImage extends Image {
 
     private String hostName = "";
