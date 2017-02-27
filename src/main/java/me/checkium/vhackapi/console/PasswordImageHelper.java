@@ -1,14 +1,16 @@
 package me.checkium.vhackapi.console;
 
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.lang.reflect.MalformedParametersException;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//TODO: cleanup code
+import org.json.JSONObject;
+
+/**
+ * Created by Julian Mundhahs on 23.02.2017.
+ */
 public class PasswordImageHelper {
 
     String secret;

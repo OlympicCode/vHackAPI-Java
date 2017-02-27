@@ -21,8 +21,8 @@ public class Target {
 		this.img = img;
 		this.hostname = hostname;
 		resolveHostname();
-		//firewallLevel = img.getFirewallLevel();
-		isWatched = img.isWatchedByFBI();
+		firewallLevel = img.getFirewallLevel();
+		isWatched = img.checkForAnonymity();
 		
 		
 			

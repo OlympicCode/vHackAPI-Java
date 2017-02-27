@@ -59,7 +59,8 @@ public class Connection {
     
     public void clearLogs(){
     	
-    	Utils.StringRequest("user::::pass::::uhash::::target", Console.user + "::::" + Console.pass + "::::" + Console.uHash + "::::" + IP, "vh_clearAccessLog.php");
+    	Utils.JSONRequest("user::::pass::::uhash::::target", Console.user + "::::" + Console.pass + "::::" + Console.uHash + "::::" + IP, "vh_clearAccessLog.php");
+    	
     }
 
     public String getUsername() {
