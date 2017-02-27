@@ -14,14 +14,16 @@ public abstract class Image {
     BufferedImage image;
 
     public Image(String base64String) throws IOException {
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(DatatypeConverter.parseBase64Binary(base64String));
-        image = ImageIO.read(byteArrayInputStream);
-        byteArrayInputStream.close();
+        this(ImageIO.read(new ByteArrayInputStream(DatatypeConverter.parseBase64Binary(base64String))));
     }
 
     public Image(BufferedImage image) {
         this.image = image;
+
+        parseImageData();
     }
+
+    protected abstract void parseImageData();
 
     protected BigInteger generateHashFor(BufferedImage image) {
         return generateHashFor(image, 16711680);

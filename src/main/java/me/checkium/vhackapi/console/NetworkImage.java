@@ -12,14 +12,14 @@ public class NetworkImage extends Image {
 
     public NetworkImage(String base64String) throws IOException {
         super(base64String);
-
-        readInHostname();
-        parseLastLine();
     }
 
     public NetworkImage(BufferedImage image) {
         super(image);
+    }
 
+    @Override
+    protected void parseImageData() {
         readInHostname();
         parseLastLine();
     }
