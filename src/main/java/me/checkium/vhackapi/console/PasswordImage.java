@@ -6,45 +6,39 @@ import java.io.IOException;
 //TODO: cleanup code
 public class PasswordImage extends Image {
 
-    private String text = "";
+    private String text;
 
     public PasswordImage(String base64String) throws IOException {
         super(base64String);
-
-        readInPassword();
     }
-
 
     public PasswordImage(BufferedImage image) {
         super(image);
+    }
 
+    @Override
+    protected void parseImageData() {
         readInPassword();
     }
 
     private void readInPassword() {
+        text = "";
+
         Letters letters = Letters.getInstance();
 
-        if (arePixelsInTenCharSpace()) {
-            for (int i = 1; i < 11; i++) {
-                BufferedImage subImage = image.getSubimage(9 * i, 15, 8, 12);
+        boolean arePixelsInTenCharSpace = arePixelsInTenCharSpace();
 
-                if (letters.getCharFor(generateHashFor(subImage)) == ' ') {
-                    throw new IllegalArgumentException("One of the characters is unkown at the moment.");
-                } else {
-                    text += letters.getCharFor(generateHashFor(subImage));
-                }
-            }
-        }
-        else {
-            for (int i = 1; i < 10; i++)
-            {
-                BufferedImage subImage = image.getSubimage((9 * i) + 4, 15, 8, 12);
+        int offset = (arePixelsInTenCharSpace ? 0 : 4);
+        int numberOfCharsDelimiter = (arePixelsInTenCharSpace?11:10);
 
-                if (letters.getCharFor(generateHashFor(subImage)) == ' ') {
-                    throw new IllegalArgumentException("One of the characters is unkown at the moment.");
-                } else {
-                    text += letters.getCharFor(generateHashFor(subImage));
-                }
+        for (int i = 1; i < numberOfCharsDelimiter; i++) {
+            BufferedImage subImage = image.getSubimage((9 * i) + offset, 15, 8, 12);
+
+            if (letters.getCharFor(generateHashFor(subImage)) == ' ') {
+                System.out.println(base64RepresentationOf(subImage));
+                throw new IllegalArgumentException("One of the characters is unkown at the moment. You may send us the preceding string so that we can add it to the lookup table.");
+            } else {
+                text += letters.getCharFor(generateHashFor(subImage));
             }
         }
     }
@@ -53,13 +47,15 @@ public class PasswordImage extends Image {
         return text;
     }
 
-    public boolean arePixelsInTenCharSpace() {
-        boolean returnValue = false;
+    private boolean arePixelsInTenCharSpace() {
         for (int y = 15; y < 27; y++) {
             for (int x = 9; x < 12; x++) {
-                returnValue |= (image.getRGB(x, y) != 16711680);
+                if(image.getRGB(x,y) != 16711680)
+                {
+                    return true;
+                }
             }
         }
-        return returnValue;
+        return false;
     }
 }
