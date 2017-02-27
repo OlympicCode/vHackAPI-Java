@@ -1,3 +1,4 @@
+
 # vHackAPI-Java
 
 ## There has been a update lately that was messed things up. Were working on integrating the changes.
@@ -8,6 +9,7 @@
 [![Discord](https://img.shields.io/badge/Chat-%20on%20Discord-738bd7.svg?style=flat-square)](https://discord.gg/PHgESQn) [![Build Status](https://img.shields.io/travis/OlympicCode/vHackAPI-Java.svg?style=flat-square)](https://travis-ci.org/OlympicCode/vHackAPI-Java) [![Downloads](https://img.shields.io/github/downloads/OlympicCode/vHackAPI-Java/total.svg?style=flat-square)]() [![GitHub release](https://img.shields.io/github/release/OlympicCode/vHackAPI-Java.svg?style=flat-square)]()
 
 ### Contributors: [@Checkium](https://github.com/checkium), [@dude24760](https://github.com/dude24760), [@angelbirth](https://github.com/angelbirth), [@Qup42](https://github.com/Qup42), [@tr0teK](https://github.com/tr0teK), [@C0mm4nd](https://github.com/C0mm4nd)
+### Active Contributors: [@Checkium](https://github.com/checkium)(API,Manager), [@C0mm4nd](https://github.com/C0mm4nd)(API), [@Qup42](https://github.com/Qup42)(API OCR) 
 ###### Don't forget to add your name here when you pull request.
 Current feature list:
 - Ability to scan the network for IP addresses.
