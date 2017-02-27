@@ -1,7 +1,5 @@
 package me.checkium.vhackapi;
 
-import java.util.concurrent.TimeUnit;
-
 import org.json.JSONObject;
 
 import me.checkium.vhackapi.Spyware.SpywareManager;
@@ -64,12 +62,16 @@ public class vHackAPI {
 	}
 
 	public void fetchStats() {
+		
+		JSONObject stats1 = Utils.JSONRequest("user::::pass::::uhash", username + "::::" + password + "::::" + userHash, "vh_update.php");
 		try {
-			TimeUnit.MILLISECONDS.sleep(200);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
-		stats = Utils.JSONRequest("user::::pass::::uhash", username + "::::" + password + "::::" + userHash, "vh_update.php");
+		//Utils.JSONRequest("user::::pass::::uhash", username + "::::" + password + "::::" + userHash, "vh_update.php");
+		stats = stats1;
+		
 	}
 	
 	public String getUsername(){

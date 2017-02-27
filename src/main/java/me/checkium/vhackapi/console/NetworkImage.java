@@ -68,8 +68,9 @@ public class NetworkImage extends Image {
         }
     }
 
-    public boolean checkForAnonymity() {
-        return anonymous;
+    public boolean isWatchedByFBI()
+    {
+        return checkRedPixel();
     }
 
     public String getHostName() {
