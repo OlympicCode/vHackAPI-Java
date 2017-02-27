@@ -1,76 +1,92 @@
 package me.checkium.vhackapi.console;
 
-import net.sourceforge.tess4j.Tesseract;
-import net.sourceforge.tess4j.TesseractException;
-
-import javax.imageio.ImageIO;
-import javax.xml.bind.DatatypeConverter;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-/**
- * Created by Julian Mundhahs on 22.02.2017.
- */
-public class NetworkImage extends Image{
+public class NetworkImage extends Image {
 
     private String hostName = "";
+    private boolean anonymous;
+    private int firewallLevel;
 
     public NetworkImage(String base64String) throws IOException {
         super(base64String);
 
         readInHostname();
+        parseLastLine();
     }
 
-    public NetworkImage(BufferedImage image)
-    {
+    public NetworkImage(BufferedImage image) {
         super(image);
 
         readInHostname();
+        parseLastLine();
     }
 
-    private boolean checkRedPixel()
-    {
+    private void parseLastLine() {
+        anonymous = checkRedPixel();
+        Letters letters = Letters.getInstance();
+
+        if (anonymous) {
+            int start = findStartOfFirewallText() + 77 + 13;
+
+            for (int i = 0; i < 10; i++) {
+                BufferedImage subImage = image.getSubimage(start + i * 9, 38, 8, 12);
+
+                if (letters.getCharFor(generateHashFor(subImage)) == ' ') {
+                    //we probably reached the end but it may also be an unknown char
+                    break;
+                } else {
+                    firewallLevel *= 10;
+                    firewallLevel += Character.getNumericValue(letters.getCharFor(generateHashFor(subImage)));
+                }
+            }
+        }
+    }
+
+
+    private boolean checkRedPixel() {
         int oneAnonymityPixel = image.getRGB(50, 38);
-        int  red   = (oneAnonymityPixel & 0x00ff0000) >> 16;
-        int  green = (oneAnonymityPixel & 0x0000ff00) >> 8;
-        int  blue  =  oneAnonymityPixel & 0x000000ff;
-        return red == 136 && green == 0 && blue == 0;
+        int red = (oneAnonymityPixel & 0x00ff0000) >> 16;
+        int green = (oneAnonymityPixel & 0x0000ff00) >> 8;
+        int blue = oneAnonymityPixel & 0x000000ff;
+        return !(red == 136 && green == 0 && blue == 0);
     }
 
     private void readInHostname() {
         Letters letters = Letters.getInstance();
 
-        for(int i=0; i<7; i++)
-        {
+        for (int i = 0; i < 7; i++) {
             BufferedImage subImage = image.getSubimage(9 * i + 72, 23, 8, 12);
 
-            if(letters.getCharFor(generateHashFor(subImage)) == ' ')
-            {
+            if (letters.getCharFor(generateHashFor(subImage)) == ' ') {
                 throw new IllegalArgumentException("One of the characters is unkown at the moment. Plese send the base64 string to us so that we cam add it");
-            }
-            else
-            {
+            } else {
                 hostName += letters.getCharFor(generateHashFor(subImage));
             }
         }
     }
 
-    private boolean checkOCRString()
-    {
-        //return true for now because the ocr functionality still needs to be reimplemented
-        return true;
-       //return (ocrString.contains("Matched by the FBI") || ocrString.contains("Watched by the FBI"));
+    public boolean checkForAnonymity() {
+        return anonymous;
     }
 
-    public boolean checkForAnonymity()
-    {
-        return checkRedPixel();
+    public String getHostName() {
+        return "XT-" + hostName + ".vhack.cc";
     }
 
-    public String getHostName()
+    public int getFirewallLevel()
     {
-        return "XT-"+hostName+".vhack.cc";
+        return firewallLevel;
+    }
+
+    private int findStartOfFirewallText() {
+        for (int x = 0; x < 263; x++) {
+            if (image.getRGB(x, 38) != 16711680) {
+                return x;
+            }
+        }
+        throw new IllegalArgumentException("The image seems to be malformed");
     }
 
 }
