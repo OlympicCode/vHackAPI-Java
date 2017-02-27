@@ -6,7 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import me.checkium.vhackapi.Utils;
-import me.checkium.vhackapi.console.ScannedNode;
+import me.checkium.vhackapi.console.Connection;
 
 public class SpywareManager {
 
@@ -20,13 +20,13 @@ public class SpywareManager {
 		userHash = uHash;
 	}
 	
-	public SpywareUploadResult uploadSpywareTo(ScannedNode node)
+	public SpywareUploadResult uploadSpywareTo(Connection node)
 	{
 		String returnString = Utils.StringRequest("user::::pass::::uhash::::target", username + "::::" + password + "::::" + userHash + "::::" + node.getIP(), "vh_spywareUpload.php");
 		return new SpywareUploadResult(returnString);
 	}
 	
-	public boolean removeSpywareFrom(ScannedNode node)
+	public boolean removeSpywareFrom(Connection node)
 	{
 		String returnString = Utils.StringRequest("user::::pass::::uhash::::target", username + "::::" + password + "::::" + userHash + "::::" + node.getIP(), "vh_removeSpywareRemote.php");
 		JSONObject d = new JSONObject(returnString);

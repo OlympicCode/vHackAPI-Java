@@ -1,12 +1,6 @@
 package me.checkium.vhackapi.console;
 
-import net.sourceforge.tess4j.Tesseract;
-import net.sourceforge.tess4j.TesseractException;
-
-import javax.imageio.ImageIO;
-import javax.xml.bind.DatatypeConverter;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 /**
@@ -56,6 +50,8 @@ public class NetworkImage extends Image{
         }
     }
 
+    @SuppressWarnings("unused")
+	@Deprecated
     private boolean checkOCRString()
     {
         //return true for now because the ocr functionality still needs to be reimplemented
@@ -63,7 +59,7 @@ public class NetworkImage extends Image{
        //return (ocrString.contains("Matched by the FBI") || ocrString.contains("Watched by the FBI"));
     }
 
-    public boolean checkForAnonymity()
+    public boolean isWatchedByFBI()
     {
         return checkRedPixel();
     }

@@ -1,4 +1,4 @@
-package examples;
+/*package examples;
 
 import me.checkium.vhackapi.vHackAPI;
 import me.checkium.vhackapi.vHackAPIBuilder;
@@ -24,4 +24,4 @@ public class ConsoleExample {
 			 }			   
 		 }
 	}
-}
+}*/

@@ -1,7 +1,5 @@
 package me.checkium.vhackapi.console;
 
-import net.sourceforge.tess4j.TesseractException;
-
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
