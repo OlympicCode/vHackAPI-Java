@@ -93,6 +93,11 @@ public class vHackAPI {
 		//return this;
 	}
 	
+		 public void upgradeBNet(int BNetID) {
+	JSONObject newbID = Utils.JSONRequest("user::::pass::::uhash::::bID", username + "::::" + password + "::::" + userHash + "::::" + BNetID, "vh_upgradeBotnet.php");
+	}
+	
+	
 	@Deprecated
 	public vHackAPI getAPI() {
 		return this;
