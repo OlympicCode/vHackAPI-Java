@@ -2,5 +2,5 @@ package me.checkium.vhackapi.upgrades;
 
 public enum UpgradeType {
 
-	inet, hdd, cpu, ram, fw, av, sdk, ipsp, spam, scan, adw
+    INET, HDD, CPU, RAM, FW, AV, SDK, IPSP, SPAM, SCAN, ADW
 }

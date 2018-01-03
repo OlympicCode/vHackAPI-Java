@@ -1,36 +1,29 @@
 package me.checkium.vhackapi;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.concurrent.*;
 
 
 public class Utils {
 
-	private static WaitingTask task;
-	private static ExecutorService executor;
-	public static Future<String> jsonTextC;
+    /**
+     * Unknown
+     */
+    static final boolean assertionstatus;
     /**
      * The url of the current api.<br>
      * As of now it is {@value url}.
      */
     private static final String url = "https://api.vhack.cc/v/3/";
     /**
-     * The hashing algorithm that is used to hash data in requests.<br>
+     * The hashing algorithm that is used to HASH data in requests.<br>
      * It now is {@value md5s}.
      */
     private static final String md5s = "MD5";
@@ -40,213 +33,171 @@ public class Utils {
      */
     private static final String secret = "aeffI";
     /**
-     * Unknown
-     */
-    static final boolean assertionstatus;
-    /**
      * Unknown - maybe the charset?
      */
     private static final byte[] byt;
-    
-    public static boolean debug = false;
+    private static Future<String> jsonTextC;
+    private static boolean debug = false;
+    private static WaitingTask task;
+    private static ExecutorService executor;
 
     static {
         assertionstatus = !Utils.class.desiredAssertionStatus();
-        byt = new byte[]{(byte) 65, (byte) 66, (byte) 67,
-        		         (byte) 68, (byte) 69, (byte) 70,
-        		         (byte) 71, (byte) 72, (byte) 73,
-        		         (byte) 74, (byte) 75, (byte) 76,
-        		         (byte) 77, (byte) 78, (byte) 79,
-        		         (byte) 80, (byte) 81, (byte) 82,
-        		         (byte) 83, (byte) 84, (byte) 85,
-        		         (byte) 86, (byte) 87, (byte) 88,
-        		         (byte) 89, (byte) 90, (byte) 97,
-        		         (byte) 98, (byte) 99, (byte) 100,
-        		         (byte) 101, (byte) 102, (byte) 103,
-        		         (byte) 104, (byte) 105, (byte) 106,
-        		         (byte) 107, (byte) 108, (byte) 109,
-        		         (byte) 110, (byte) 111, (byte) 112,
-        		         (byte) 113, (byte) 114, (byte) 115,
-        		         (byte) 116, (byte) 117, (byte) 118, 
-        		         (byte) 119, (byte) 120, (byte) 121,
-        		         (byte) 122, (byte) 48, (byte) 49,
-        		         (byte) 50, (byte) 51, (byte) 52,
-        		         (byte) 53, (byte) 54, (byte) 55,
-        		         (byte) 56, (byte) 57, (byte) 45,
-        		         (byte) 95};
+        byt = new byte[]{65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88,
+                89, 90, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116,
+                117, 118, 119, 120, 121, 122, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 45, 95};
     }
 
     /**
      * Reads all data from a buffered reader and returns it as a String.
+     *
      * @param rd The buffered Reader which holds the data.
      * @return The String representation of data the buffered reader contains.
-     * @throws IOException  If an I/O error occurs
+     * @throws IOException If an I/O error occurs
      */
     public static String readJson(Reader rd) throws IOException {
         StringBuilder sb = new StringBuilder();
         int cp;
         while ((cp = rd.read()) != -1) {
-          sb.append((char) cp);
+            sb.append((char) cp);
         }
         return sb.toString();
-      }
+    }
 
     /**
      * Makes a request to the api and returns the result as a JSONObject Object.
      * Makes a requests to the vHack Api, with the params format, data data and to the file php and returns the result, which is json, as a JSONObject Object.<br>
      * Errors are thrown if user/password is wrong and (possibly) if the api url changed.<br>
-     * It is similar to {@link Utils#StringRequest(String, String, String)} but differs from it in that does processing with the obtained data.<br>
+     * It is similar to {@link Utils#stringRequest(String, String, String)} but differs from it in that does processing with the obtained data.<br>
      * it returns the result as json Object and performs checks for any (known) errors.
+     *
      * @param format Lists the params that will be passed to the api endpoint. The names are separated with "::::".<br>
-     *               Every request, except the very first one, should include "user::::pass::::uhash".<br>
-     *               Example: "user::::pass::::uhash::::global" (taken from Console.getIP)
-     * @param data The data for the params that you passed in. They are also separated by "::::". You can just concatanate the parts of this.<br>
-     *             Example: "vHackAPI::::123456::::aaaabbbbccccddddeeeeffffgggghhhhiiiijjjjkkkkllllmmmmnnnnoooopppp::::1"
-     * @param php This is the api endpoint that the request will be sent to. In the case of the vHackAPI it are php documents.<br>
-     *            Example "vh_network.php"
-     * @return The resulte Json as a JSONObject. Errors are thrown if user/password is wrong and (possibly) if the api url changed. null is returned if there are other errors.
-     * @throws ExecutionException 
-     * @throws InterruptedException 
+     *               Every request, except the very first one, should include "user::::pass::::UHASH".<br>
+     *               Example: "user::::pass::::UHASH::::global" (taken from Console.getIP)
+     * @param data   The data for the params that you passed in. They are also separated by "::::". You can just concatanate the parts of this.<br>
+     *               Example: "VHackAPI::::123456::::aaaabbbbccccddddeeeeffffgggghhhhiiiijjjjkkkkllllmmmmnnnnoooopppp::::1"
+     * @param php    This is the api endpoint that the request will be sent to. In the case of the VHackAPI it are php documents.<br>
+     *               Example "vh_network.php"
+     * @return The result Json as a JSONObject. Errors are thrown if user/password is wrong and (possibly) if the api url changed. null is returned if there are other errors.
      */
-    public static JSONObject JSONRequest(String format, String data, String php){
+    public static JSONObject JSONRequest(String format, String data, String php) {
+        executor = Executors.newFixedThreadPool(3);
+        Future<JSONObject> cmsoon = executor.submit(() -> {
+            jsonTextC = request(format, data, php);
+            String jsonText = "";
+            if (task != null)
+                executor.submit(task);
+            try {
 
-    	executor = Executors.newFixedThreadPool(3);
-    	Future<JSONObject> cmsoon = executor.submit(new Callable<JSONObject>(){
-    		
-    		@Override
-    		public JSONObject call(){
-    			JSONObject json = null;
-    			jsonTextC = Request(format, data, php);
-    			String jsonText = "";
-			    if(task != null)
-    				executor.submit(task);
-    			try{
-    		
-    				jsonText = jsonTextC.get();
-    			
-    			} catch(Exception e) {    	
-    		
-    				try {
-    					Thread.sleep(1000);
-    				} catch (InterruptedException e1) {
-				
-    				}
-    				JSONRequest(format,data,php);
-    		
-    			}
-    			if("".equals(jsonText))
-    			{
-    				throw new RuntimeException("Old API URL");
-    			}
-    			else if("8".equals(jsonText))
-    			{
-    				throw new RuntimeException("Wrong Password/User");
-    			}
-    			else if (jsonText.length() == 1) {
-    				return null;
-    			}
-    			json = new JSONObject(jsonText);
-    			return json;
-    		}
-    	});
-    	try {
-			return cmsoon.get();
-		} catch (Exception e){
-			JSONRequest(format,data,php);
-		}
-    	return null;
-	}
+                jsonText = jsonTextC.get();
+
+            } catch (Exception e) {
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e1) {
+
+                }
+                JSONRequest(format, data, php);
+
+            }
+            if ("".equals(jsonText)) {
+                throw new RuntimeException("Old API URL");
+            } else if ("8".equals(jsonText)) {
+                throw new RuntimeException("Wrong Password/User");
+            } else if (jsonText.length() == 1) {
+                return null;
+            }
+            return new JSONObject(jsonText);
+        });
+        try {
+            return cmsoon.get();
+        } catch (Exception e) {
+            JSONRequest(format, data, php);
+        }
+        return null;
+    }
 
     //it'll just do the request without any checks
+
     /**
      * Makes a request to the api and returns the result as a String.
      * Makes a requests to the vHack Api, with the params format, data data and to the file php and returns the result, which is json, as a String Object.<br>
      * It is similar to {@link Utils#JSONRequest(String, String, String)} but differs from it in the form that it returns and String and doesn't perform checks.
+     *
      * @param format Lists the params that will be passed to the api endpoint. The names are separated with "::::".<br>
-     *               Every request, except the very first one, should include "user::::pass::::uhash".<br>
-     *               Example: "user::::pass::::uhash::::global" (taken from Console.getIP)
-     * @param data The data for the params that you passed in. They are also separated by "::::". You can just concatanate the parts of this.<br>
-     *             Example: "vHackAPI::::123456::::aaaabbbbccccddddeeeeffffgggghhhhiiiijjjjkkkkllllmmmmnnnnoooopppp::::1"
-     * @param php This is the api endpoint that the request will be sent to. In the case of the vHackAPI it are php documents.<br>
-     *            Example "vh_network.php"
+     *               Every request, except the very first one, should include "user::::pass::::UHASH".<br>
+     *               Example: "user::::pass::::UHASH::::global" (taken from Console.getIP)
+     * @param data   The data for the params that you passed in. They are also separated by "::::". You can just concatanate the parts of this.<br>
+     *               Example: "VHackAPI::::123456::::aaaabbbbccccddddeeeeffffgggghhhhiiiijjjjkkkkllllmmmmnnnnoooopppp::::1"
+     * @param php    This is the api endpoint that the request will be sent to. In the case of the VHackAPI it are php documents.<br>
+     *               Example "vh_network.php"
      * @return The resulte Json as a Future<String>.
      */
     //JDOC needs rewriting
-    public static Future<String> Request(String format, String data, String php)
-    {
-    	
-    	Future<String> result = executor.submit(new Callable<String>(){
-    		@Override
-    		public String call() {
-    			String jText;
-    			System.setProperty("http.agent", "Chrome");
-    			InputStream is;
-    			try {
-    				is = new URL(Utils.generateURL(format, data, php)).openStream();
-    				if(debug == true){
-   				
-    					URL url = new URL(Utils.generateURL(format, data, php));
-    					System.out.println(url.toString());
-    			
-    				}
-    				Thread.sleep(1000);
-    				BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-    				jText = Utils.readJson(rd);
-    				return jText;
-    			} catch (Exception e) {
-    				try {
-    					Thread.sleep(1000);
-    				} catch (InterruptedException e1) {
-    					e1.printStackTrace();
-    				}
-    				Request(format,data,php);
-    			}
-    	
-    			return null;
-    		}
-    	});
-    	return result;
-    }
-    
-    public static String StringRequest(String format, String data, String php)
-    {
-    	Future<String> cmsoon = executor.submit(new Callable<String>(){
-    		@Override
-    		public String call() {
-    			jsonTextC = Request(format, data, php);
-    			String jsonText = "";
-    				try{
-    					jsonText = jsonTextC.get();
-    					return jsonText;
-    			
-    				} catch(Exception e) {    	
-    		
-    					try {
-    						Thread.sleep(1000);
-    					} catch (InterruptedException e1) {
-				
-    					}
-    					StringRequest(format,data,php);
-    		
-    				}
-    				return null;
-    		}
-    	});
-    	try {
-			return cmsoon.get();
-		} catch (Exception e){
-			StringRequest(format,data,php);
-		}
-    	return null;
-    	
+    public static Future<String> request(String format, String data, String php) {
+        return executor.submit(() -> {
+            String jText;
+            System.setProperty("http.agent", "Chrome");
+            InputStream is;
+            try {
+                is = new URL(Utils.generateURL(format, data, php)).openStream();
+                if (debug == true) {
+
+                    URL url = new URL(Utils.generateURL(format, data, php));
+                    System.out.println(url.toString());
+
+                }
+                Thread.sleep(1000);
+                BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+                jText = Utils.readJson(rd);
+                return jText;
+            } catch (Exception e) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                request(format, data, php);
+            }
+
+            return null;
+        });
     }
 
-    public static <T extends WaitingTask> void setWaitingTask(T wt){
-    	
-    	task = wt;
-    	
+    public static String stringRequest(String format, String data, String php) {
+        Future<String> cmsoon = executor.submit(() -> {
+            jsonTextC = request(format, data, php);
+            try {
+                String jsonText = jsonTextC.get();
+                return jsonText;
+
+            } catch (Exception e) {
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e1) {
+
+                }
+                stringRequest(format, data, php);
+
+            }
+            return null;
+        });
+        try {
+            return cmsoon.get();
+        } catch (Exception e) {
+            stringRequest(format, data, php);
+        }
+        return null;
+
     }
 
+    public static <T extends WaitingTask> void setWaitingTask(T wt) {
+        task = wt;
+    }
+
+    //WTF is this?
     private static byte[] m9179a(byte[] arrby, int n2, int n3, byte[] arrby2, int n4, byte[] arrby3) {
         int n5 = n3 > 0 ? arrby[n2] << 24 >>> 8 : 0;
         int n6 = n3 > 1 ? arrby[n2 + 1] << 24 >>> 16 : 0;
@@ -295,6 +246,7 @@ public class Utils {
     /**
      * Hashes the given String with {@value md5s}.
      * The hashing alorithm is determined by {@link Utils#md5s}
+     *
      * @param str The string that should be hashed with {@value md5s}.
      * @return The parameter str hashed using {@value md5s}.
      */
@@ -359,22 +311,23 @@ public class Utils {
      * Generates a url to where a request has to be made.
      * Generates the complete url a request has to be done to, to achieve a certain action (E.g. upgrade a Botnet Computer).<br>
      * Needed for this are the username, the password, the uHash and any additional parameters. The time is also neede but you dont need to supply it because the programm get the time by it itself.<br>
-     * It is used by {@link Utils#JSONRequest(String, String, String)} and {@link Utils#StringRequest(String, String, String)}.
+     * It is used by {@link Utils#JSONRequest(String, String, String)} and {@link Utils#stringRequest(String, String, String)}.
+     *
      * @param format Lists the params that will be passed to the api endpoint. The names are separated with "::::".<br>
-     *               Every request, except the very first one, should include "user::::pass::::uhash".<br>
-     *               Example: "user::::pass::::uhash::::global" (taken from Console.getIP)
-     * @param data The data for the params that you passed in. They are also separated by "::::". You can just concatanate the parts of this.<br>
-     *             Example: "vHackAPI::::123456::::aaaabbbbccccddddeeeeffffgggghhhhiiiijjjjkkkkllllmmmmnnnnoooopppp::::1"
-     * @param php This is the api endpoint that the request will be sent to. In the case of the vHackAPI it are php documents.<br>
-     *            Example "vh_network.php"
+     *               Every request, except the very first one, should include "user::::pass::::UHASH".<br>
+     *               Example: "user::::pass::::UHASH::::global" (taken from Console.getIP)
+     * @param data   The data for the params that you passed in. They are also separated by "::::". You can just concatanate the parts of this.<br>
+     *               Example: "VHackAPI::::123456::::aaaabbbbccccddddeeeeffffgggghhhhiiiijjjjkkkkllllmmmmnnnnoooopppp::::1"
+     * @param php    This is the api endpoint that the request will be sent to. In the case of the VHackAPI it are php documents.<br>
+     *               Example "vh_network.php"
      * @return The url Url a request has to be directed to.
      */
-    public  static String generateURL(String format, String data, String php) {
+    public static String generateURL(String format, String data, String php) {
         String[] split = format.split("::::");
         String[] split2 = data.split("::::");
         long currentTimeMillis = System.currentTimeMillis() / 1000;
         JSONObject jSONObject = new JSONObject();
-        jSONObject.put("","");
+        jSONObject.put("", "");
         for (int i = 0; i < split.length; i++) {
             try {
                 jSONObject.put(split[i], split2[i]);

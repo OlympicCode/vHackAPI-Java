@@ -4,119 +4,101 @@ import java.util.HashMap;
 
 public class MultiplePackageResult {
 
-	private int money,netcoins,av,fw,ipsp,pcs,sdk,spam,scan,adw,boost;
-	private HashMap<PackageResults, Integer> results = new HashMap<>();
+    private int money;
+    private int netcoins;
+    private int av;
+    private int fw;
+    private int ipsp;
+    private int pcs;
+    private int sdk;
+    private int spam;
+    private int scan;
+    private int adw;
+    private int boost;
+    private HashMap<PackageResults, Integer> results = new HashMap<>();
 
-	public MultiplePackageResult(PackageResult[] res) {
-		
-		for(PackageResult r:res){
-			
-			PackageResults rE = r.getResultType();
-			int n = r.getResultAmount();
-			if(rE == PackageResults.money){
-				
-				money += n;
-				
-			} else if (rE == PackageResults.netcoins){
-				
-				netcoins += n;
-				
-			} else if (rE == PackageResults.av){
-				
-				av += n;
-				
-			} else if (rE == PackageResults.fw){
-				
-				fw += n;
-				
-			} else if (rE == PackageResults.ipsp){
-				
-				ipsp += n;
-				
-			} else if (rE == PackageResults.btntpc){
-				
-				pcs += n;
-				
-			} else if (rE == PackageResults.sdk){
-				
-				sdk += n;
-				
-			} else if (rE == PackageResults.spam){
-				
-				spam += n;
-				
-			} else if (rE == PackageResults.scan){
-				
-				scan += n;
-				
-			} else if (rE == PackageResults.adw){
-				
-				adw += n;
-				
-			} else if (rE == PackageResults.boost){
-				
-				boost += n;
-				
-			}
-			
-		}
-		
-	}
-	
-	public HashMap<PackageResults, Integer> getResults(){
-		
-		for(PackageResults rE:PackageResults.values()){
-			
-			if(rE == PackageResults.money){
-				
-				results.put(rE, money);
-				
-			} else if (rE == PackageResults.netcoins){
-				
-				results.put(rE, netcoins);
-				
-			} else if (rE == PackageResults.av){
-				
-				results.put(rE, av);
-				
-			} else if (rE == PackageResults.fw){
-				
-				results.put(rE, fw);
-				
-			} else if (rE == PackageResults.ipsp){
-				
-				results.put(rE, ipsp);
-				
-			} else if (rE == PackageResults.btntpc){
-				
-				results.put(rE, pcs);
-				
-			} else if (rE == PackageResults.sdk){
-				
-				results.put(rE, sdk);
-				
-			} else if (rE == PackageResults.spam){
-				
-				results.put(rE, spam);
-				
-			} else if (rE == PackageResults.scan){
-				
-				results.put(rE, scan);
-				
-			} else if (rE == PackageResults.adw){
-				
-				results.put(rE, adw);
-				
-			} else if (rE == PackageResults.boost){
-				
-				results.put(rE, boost);
-				
-			}
-			
-		}
-		
-		return results;
-		
-	}
-		
+    public MultiplePackageResult(PackageResult[] res){
+        for (PackageResult r : res){
+            PackageResults result = r.getResultType();
+            int n = r.getResultAmount();
+            switch(result) {
+                case MONEY: {
+                    money += n;
+                }
+                case NETCOINS: {
+                    netcoins += n;
+                }
+                case AV: {
+                    av += n;
+                }
+                case FW: {
+                    fw += n;
+                }
+                case IPSP: {
+                    ipsp += n;
+                }
+                case BTNTPC: {
+                    pcs += n;
+                }
+                case SDK: {
+                    sdk += n;
+                }
+                case SPAM: {
+                    spam += n;
+                }
+                case SCAN: {
+                    scan += n;
+                }
+                case ADW: {
+                    adw += n;
+                }
+                case BOOST: {
+                    boost += n;
+                }
+            }
+        }
+    }
+
+    public HashMap<PackageResults, Integer> getResults(){
+        for (PackageResults result : PackageResults.values()){
+            switch(result){
+                case MONEY:{
+                    results.put(result, money);
+                }
+                case NETCOINS: {
+                    results.put(result, netcoins);
+                }
+                case AV:{
+                    results.put(result, av);
+                }
+                case FW:{
+                    results.put(result, fw);
+                }
+                case IPSP:{
+                    results.put(result, ipsp);
+                }
+                case BTNTPC:{
+                    results.put(result, pcs);
+                }
+                case SDK:{
+                    results.put(result, sdk);
+                }
+                case SPAM:{
+                    results.put(result, spam);
+                }
+                case SCAN:{
+                    results.put(result, scan);
+                }
+                case ADW:{
+                    results.put(result, adw);
+                }
+                case BOOST:{
+                    results.put(result, boost);
+                }
+            }
+        }
+
+        return results;
+    }
+
 }

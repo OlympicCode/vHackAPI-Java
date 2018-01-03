@@ -2,22 +2,18 @@ package me.checkium.vhackapi.cluster;
 
 public enum ClusterRank {
 
-    MEMBER   ("Member"),
-    LEADER   ("Leader"),
-	COLEADER ("Co-Leader");
-	
-	String tostring;
-	
-	ClusterRank(String tostring){
-		
-		this.tostring = tostring;
-		
-	}
-	
-	public String toString(){
-		
-		return tostring;
-		
-	}
-	
+    MEMBER("Member"),
+    LEADER("Leader"),
+    COLEADER("Co-Leader");
+
+    String rank;
+
+    ClusterRank(String rank) {
+        this.rank = rank;
+    }
+
+    public String toString() {
+        return rank;
+    }
+
 }

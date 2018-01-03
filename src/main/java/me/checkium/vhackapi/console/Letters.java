@@ -4,21 +4,14 @@ import java.math.BigInteger;
 import java.util.HashMap;
 
 //TODO: move to a suitable package -> eg. OCR
-public class Letters {
+public enum Letters {
+
+    INSTANCE;
 
     private static HashMap<BigInteger, Character> table;
 
-    private static Letters instance;
-
-    private Letters() {}
-
     public static Letters getInstance() {
-        if(Letters.instance == null)
-        {
-            Letters.instance = new Letters();
-            initializeTable();
-        }
-        return Letters.instance;
+        return INSTANCE;
     }
 
     private static void initializeTable() {
@@ -92,7 +85,6 @@ public class Letters {
         table.put((new BigInteger("117618867732573307059834716160")), ']');
         table.put((new BigInteger("79228162514336113712605167616")), '-');
         table.put((new BigInteger("79228162514264337593544015616")), '_');
-
 
     }
 
