@@ -2,11 +2,11 @@ package me.checkium.vhackapi.upgrades;
 
 public enum UpgradeResult {
 
-	/**
-	 *  NoMoney = No money
-	 *  Invalid = Already max / Invalid
-	 *  NoMemory = No RAM
-	 *  Success = Task added successfully
-	 */
-	NoMoney, Invalid, NoMemory, Success
+    /**
+     * NO_MONEY = No MONEY
+     * INVALID = Already max / INVALID
+     * NO_MEMORY = No RAM
+     * SUCCESS = Task added successfully
+     */
+    NO_MONEY, INVALID, NO_MEMORY, SUCCESS
 }

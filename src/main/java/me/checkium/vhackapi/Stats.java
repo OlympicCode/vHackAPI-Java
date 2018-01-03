@@ -2,6 +2,6 @@ package me.checkium.vhackapi;
 
 public enum Stats {
 
-	money, ip, inet, hdd, cpu, ram, fw, av, sdk, ipsp, spam, scan, adw, netcoins, bonus, elo, hash, id, uhash, score, boost, clusterID, position, rank, actspyware
-	
+    MONEY, IP, INET, HDD, CPU, RAM, FW, AV, SDK, IPSP, SPAM, SCAN, ADW, NETCOINS, BONUS, ELO, HASH, ID, UHASH, SCORE, BOOST, CLUSTER_ID, POSITION, RANK, ACTSPYWARE
+
 }

@@ -75,8 +75,7 @@ public class NetworkImage extends Image {
         return "XT-" + hostName + ".vhack.cc";
     }
 
-    public int getFirewallLevel()
-    {
+    public int getFirewallLevel() {
         return firewallLevel;
     }
 

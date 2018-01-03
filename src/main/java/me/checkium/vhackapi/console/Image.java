@@ -1,6 +1,5 @@
 package me.checkium.vhackapi.console;
 
-
 import javax.imageio.ImageIO;
 import javax.xml.bind.DatatypeConverter;
 import java.awt.image.BufferedImage;
@@ -22,7 +21,6 @@ public abstract class Image {
 
     public Image(BufferedImage image) {
         this.image = image;
-
         parseImageData();
     }
 
@@ -34,7 +32,6 @@ public abstract class Image {
 
     protected BigInteger generateHashFor(BufferedImage image, int imageColorToSearchFor) {
         BigInteger two = BigInteger.valueOf(2);
-
         BigInteger hash = BigInteger.ONE;
 
         for (int y = 0; y < image.getHeight(); y++) {
@@ -42,6 +39,7 @@ public abstract class Image {
                 hash = hash.multiply(two).add(BigInteger.valueOf((image.getRGB(x, y) == imageColorToSearchFor ? 0 : 1)));
             }
         }
+
         return hash;
     }
 
@@ -52,7 +50,7 @@ public abstract class Image {
             return DatatypeConverter.printBase64Binary(byteArrayOutputStream.toByteArray());
         } catch (IOException e) {
             e.printStackTrace();
-            throw  new IllegalArgumentException("Couldn't convert the BufferedImage to a base64 String");
+            throw new IllegalArgumentException("Couldn't convert the BufferedImage to a base64 String");
         }
     }
 }

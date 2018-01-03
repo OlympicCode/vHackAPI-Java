@@ -6,22 +6,26 @@ import org.json.JSONObject;
 public class TransferResult {
 
     protected boolean success;
-    protected int moneyamount;
-    protected int repgained;
-    protected int replost;
+    private int moneyamount;
+    private int repgained;
+    private int replost;
     protected String ip;
 
     public TransferResult(JSONObject result, String ip) throws JSONException {
         this.ip = ip;
         success = result.getString("result").contains("0");
-        if (!success) return;
+        if (!success){
+            return;
+        }
+
         try {
             moneyamount = result.getInt("amount");
         } catch (JSONException e) {
             System.out.println(result);
             e.printStackTrace();
         }
-        if (Integer.toString(result.getInt("eloch")).contains("-")) {
+
+        if (result.getInt("eloch") < 0) {
             replost = result.getInt("eloch");
             repgained = 0;
         } else {
