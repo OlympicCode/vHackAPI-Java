@@ -1,0 +1,16 @@
+group 'OlympicCode'
+version '2.0-SNAPSHOT'
+
+apply plugin: 'java'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.squareup.okhttp3:okhttp:3.9.1'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    compile group: 'org.json', name: 'json', version: '20090211'
+    compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.1'
+}
