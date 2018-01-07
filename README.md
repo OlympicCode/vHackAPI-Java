@@ -6,9 +6,9 @@
 [![Discord](https://img.shields.io/badge/Chat-%20on%20Discord-738bd7.svg?style=flat-square)](https://discord.gg/52MtBDp) [![Downloads](https://img.shields.io/github/downloads/OlympicCode/vHackAPI-Java/total.svg?style=flat-square)]()
 #
 ##### Current API progress:
-- [ ] Base request system
-- [ ] Basic status retrieving
-- [ ] Searching, scanning & attacking
+- [x] Base request system
+- [x] Basic status retrieving
+- [x] Searching, scanning & attacking
 - [ ] Upgrading and task management
 - [ ] Cluster joining, managing & attacking
 - [ ] Notepad IP and text management
