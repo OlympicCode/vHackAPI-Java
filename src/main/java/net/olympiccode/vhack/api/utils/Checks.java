@@ -8,18 +8,6 @@ public class Checks {
             throw new IllegalArgumentException(name + " may not be null");
     }
 
-    public static void check(final boolean expression, final String message)
-    {
-        if (!expression)
-            throw new IllegalArgumentException(message);
-    }
-
-    public static void check(final boolean expression, final String message, final Object... args)
-    {
-        if (!expression)
-            throw new IllegalArgumentException(String.format(message, args));
-    }
-
     public static void check(final boolean expression, final String message, final Object arg)
     {
         if (!expression)

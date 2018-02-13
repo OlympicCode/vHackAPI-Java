@@ -1,39 +1,24 @@
 package net.olympiccode.vhack.api.entities.console.impl;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.olympiccode.vhack.api.entities.console.TransferResult;
 
+@Getter
+@Setter
 public class TransferResultImpl implements TransferResult {
     private boolean success;
-    private int elo;
-    private int eloch;
-    private long newmoney;
-    private long money;
+    private int newElo;
+    private int eloObtained;
+    private long newMoney;
+    private long moneyObtained;
 
     public TransferResultImpl(int result, int elo, int eloch, int money, long newmoney) {
         success = result == 0;
-        this.elo = elo;
-        this.eloch = eloch;
-        this.money = money;
-        this.newmoney = newmoney;
+        this.newElo = elo;
+        this.eloObtained = eloch;
+        this.moneyObtained = money;
+        this.newMoney = newmoney;
     }
 
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public int getEloObtained() {
-        return eloch;
-    }
-
-    public long getMoneyObtained() {
-        return money;
-    }
-
-    public long getNewMoney() {
-        return newmoney;
-    }
-
-    public int getNewElo() {
-        return elo;
-    }
 }

@@ -145,7 +145,14 @@ public class Route {
     }
 
     public static class Tasks {
-
+        public static final Route UPDATE_INFO = new Route("updateInfo", "utype");
+        public static final Route ADD_UPDATE = new Route("addUpdate", "utype");
+        public static final Route FILL_TASKS = new Route("fillTasks", "utype");
+        public static final Route GET_TASKS = new Route("tasks");
+        public static final Route BOOST_TASKS = new Route("tasks", "boost");
+        public static final Route FINISH_ALL = new Route("finishAll");
+        public static final Route FINISH_TASK = new Route("finishTask", "taskid");
+        public static final Route ABORT_TASK = new Route("abortTask", "taskid");
     }
 
     public static class Botnet {

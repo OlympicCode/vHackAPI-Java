@@ -1,5 +1,7 @@
 package net.olympiccode.vhack.api.entities.console.impl;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.olympiccode.vhack.api.entities.console.Target;
 import net.olympiccode.vhack.api.entities.impl.vHackAPIImpl;
 import net.olympiccode.vhack.api.exceptions.ScanFailException;
@@ -15,6 +17,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Objects;
 
+@Getter
+@Setter
 public class TargetImpl implements Target {
     private String hostName;
     private String imageRaw;
@@ -38,25 +42,9 @@ public class TargetImpl implements Target {
         watched = (red == 136 && green == 0 && blue == 0);
     }
 
-    public boolean isWatched() {
-        return watched;
-    }
-
-    public String getHostName() {
-        return hostName;
-    }
-
-    public String getImageRaw() {
-        return imageRaw;
-    }
-
-    public BufferedImage getImage() {
-        return image;
-    }
-
     public ScannedTargetImpl scan() throws ScanFailException {
         if (watched) {
-            throw new ScanFailException(hostName, true);
+            throw new ScanFailException(hostName, ScanFailException.Reason.WATCHED_BY_FBI);
         }
         Route.CompiledRoute cr = Route.Console.SCAN_HOST.compile(api, hostName);
         Response r = api.getRequester().getResponse(cr);
@@ -70,7 +58,7 @@ public class TargetImpl implements Target {
             e.printStackTrace();
         }
         if (Objects.isNull(ip) || vuln < 1) {
-            throw new ScanFailException(ip, false);
+            throw new ScanFailException(ip, ScanFailException.Reason.UPGRADE_SDK);
         }
         cr = Route.Console.LOAD_REMOTE_DATA.compile(api, ip);
         r = api.getRequester().getResponse(cr);
@@ -91,13 +79,17 @@ public class TargetImpl implements Target {
             JSONObject object2 = new JSONObject(r.getString());
             fw = Integer.parseInt(object2.getString("fw"));
             av = Integer.parseInt(object2.getString("av"));
-            spam = Integer.parseInt(object2.getString("spam"));
+            try {
+                spam = Integer.parseInt(object2.getString("spam"));
+            } catch (NumberFormatException e) {
+                spam = -1;
+            }
             sdk = Integer.parseInt(object2.getString("sdk"));
             ipsp = Integer.parseInt(object2.getString("ipsp"));
             try {
             money = Long.parseLong(object2.getString("money"));
             } catch (NumberFormatException e) {
-                winchance = 0;
+                winchance = -1;
             }
             anonymous = object2.getString("anonymous").equalsIgnoreCase("YES");
             username = object2.getString("username");

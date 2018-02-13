@@ -46,7 +46,7 @@ public class Requester {
     public Response getResponse(Route.CompiledRoute route) {
         if (lastRequest >= System.currentTimeMillis() - 1000) {
             try {
-                Thread.sleep(200);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -57,7 +57,6 @@ public class Requester {
                 .addHeader("user-agent", "Dalvik/1.6.0 (Linux; U; Android 4.4.4; SM-N935F Build/KTU84P)")
                 .addHeader("Accept-Encoding", "gzip").build();
         final Response[] response = new Response[1];
-
         okhttp3.Response r;
         try {
             r = httpClient.newCall(request).execute();
@@ -67,10 +66,13 @@ public class Requester {
         }
         if (r.isSuccessful()) {
             response[0] = new Response(r);
+        } else {
+            throw new RuntimeException("Failed to get response from vHack " + r.code());
         }
         try {
             switch (response[0].getString()) {
                 case "8":
+                    api.setStatus(vHackAPI.Status.FAILED_TO_LOGIN);
                     throw new LoginException("Invalid username or password");
                 case "10":
                     throw new RuntimeException("Invalid data sent");

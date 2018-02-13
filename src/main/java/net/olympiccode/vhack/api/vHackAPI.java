@@ -2,6 +2,7 @@ package net.olympiccode.vhack.api;
 
 import net.olympiccode.vhack.api.entities.console.Console;
 import net.olympiccode.vhack.api.entities.User;
+import net.olympiccode.vhack.api.entities.tasks.UpgradeManager;
 import net.olympiccode.vhack.api.events.EventListener;
 
 import java.util.List;
@@ -49,4 +50,6 @@ public interface vHackAPI {
     Console getConsole();
 
     User getUser();
+
+    UpgradeManager getUpgradeManager();
 }

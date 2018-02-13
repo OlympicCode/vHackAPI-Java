@@ -3,6 +3,9 @@ package net.olympiccode.vhack.api.entities.impl;
 import net.olympiccode.vhack.api.entities.console.Console;
 import net.olympiccode.vhack.api.entities.User;
 import net.olympiccode.vhack.api.entities.console.impl.ConsoleImpl;
+import net.olympiccode.vhack.api.entities.tasks.UpgradeManager;
+import net.olympiccode.vhack.api.entities.tasks.impl.TaskImpl;
+import net.olympiccode.vhack.api.entities.tasks.impl.UpgradeManagerImpl;
 import net.olympiccode.vhack.api.events.Event;
 import net.olympiccode.vhack.api.events.EventListener;
 import net.olympiccode.vhack.api.requests.Requester;
@@ -18,6 +21,9 @@ import org.slf4j.LoggerFactory;
 import javax.security.auth.login.LoginException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 public class vHackAPIImpl implements vHackAPI {
 
@@ -35,14 +41,19 @@ public class vHackAPIImpl implements vHackAPI {
     private String password = null;
     private String uhash = "";
 
-    private UserImpl user = new UserImpl(this);
-    private ConsoleImpl console = new ConsoleImpl(this);
+    public UserImpl user = new UserImpl(this);
+    private ConsoleImpl console;
+    private UpgradeManagerImpl upgradeManager;
+
+    ScheduledFuture statsTask;
 
     public vHackAPIImpl(OkHttpClient.Builder httpClientBuilder, boolean autoReconnect, int maxReconnectDelay, int corePoolSize) {
         this.httpClientBuilder = httpClientBuilder;
         this.autoReconnect = autoReconnect;
         this.maxReconnectDelay = maxReconnectDelay;
         this.requester = new Requester(this);
+
+
     }
 
 
@@ -64,10 +75,12 @@ public class vHackAPIImpl implements vHackAPI {
         Route.CompiledRoute r = Route.Misc.UPDATE.compile(this);
         try {
             Response resp = getRequester().getResponse(r);
+            setStatus(Status.LOADING_SUBSYSTEMS);
+            LOG.info("Loading subsystems...");
             JSONObject userResponse = new JSONObject(resp.getString());
             this.uhash = userResponse.getString("uhash");
             user.setMoney(Long.valueOf(userResponse.getString("money")));
-            user.setIp(userResponse.getString("ip"));
+            user.setIP(userResponse.getString("ip"));
             user.setPackages(Integer.parseInt(userResponse.getString("bonus")));
             user.setGoldPackages(Integer.parseInt(userResponse.getString("allbox")) - Integer.parseInt(userResponse.getString("bonus")));
             user.setUnreadMail(Integer.parseInt(userResponse.getString("urmail")));
@@ -79,6 +92,10 @@ public class vHackAPIImpl implements vHackAPI {
             user.setReputation(Integer.parseInt(userResponse.getString("elo")));
             user.setNetcoins(Integer.parseInt(userResponse.getString("netcoins")));
             user.setBoosters(Integer.parseInt(userResponse.getString("boost")));
+
+            user.setFirewall(Integer.parseInt(userResponse.getString("fw")));
+            console =  new ConsoleImpl(this);
+            upgradeManager = new UpgradeManagerImpl(this);
         } catch (RuntimeException e) {
             Throwable ex = e.getCause() != null ? e.getCause().getCause() : null;
             if (ex instanceof LoginException)
@@ -135,10 +152,11 @@ public class vHackAPIImpl implements vHackAPI {
         return listeners;
     }
 
-    @Override
     public Console getConsole() {
         return console;
     }
+
+    public UpgradeManager getUpgradeManager() { return upgradeManager; }
 
     public String getUhash() {
         return uhash;
@@ -152,12 +170,42 @@ public class vHackAPIImpl implements vHackAPI {
         return requester;
     }
 
-    @Override
     public User getUser() {
         return user;
     }
 
-    public UserImpl getUserI() {
-        return user;
+    public void setupThreads() {
+        statsTask = Executors.newSingleThreadScheduledExecutor(r -> new Thread(r, "[vHackAPI] Stat updater")).scheduleAtFixedRate(() -> {
+            Route.CompiledRoute r = Route.Misc.UPDATE.compile(this);
+            Response resp = getRequester().getResponse(r);
+            try {
+                JSONObject userResponse = new JSONObject(resp.getString());
+                user.setMoney(Long.valueOf(userResponse.getString("money")));
+                user.setIP(userResponse.getString("ip"));
+                user.setPackages(Integer.parseInt(userResponse.getString("bonus")));
+                user.setGoldPackages(Integer.parseInt(userResponse.getString("allbox")) - Integer.parseInt(userResponse.getString("bonus")));
+                user.setUnreadMail(Integer.parseInt(userResponse.getString("urmail")));
+                user.setScore(Integer.parseInt(userResponse.getString("score")));
+                user.setRank(Integer.parseInt(userResponse.getString("rank")));
+                user.setActiveSpyware(Integer.parseInt(userResponse.getString("actspyware")));
+                user.setId(Integer.parseInt(userResponse.getString("id")));
+                user.setActive(Integer.parseInt(userResponse.getString("active")) > 0);
+                user.setReputation(Integer.parseInt(userResponse.getString("elo")));
+                user.setNetcoins(Integer.parseInt(userResponse.getString("netcoins")));
+                user.setBoosters(Integer.parseInt(userResponse.getString("boost")));
+
+                user.setFirewall(Integer.parseInt(userResponse.getString("fw")));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }, 0, 10, TimeUnit.SECONDS);
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                System.out.println("Shutting down");
+                upgradeManager.getTaskService().shutdown();
+                statsTask.cancel(true);
+            }
+        });
     }
 }

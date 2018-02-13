@@ -1,5 +1,7 @@
 package net.olympiccode.vhack.api.entities.console.impl;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.olympiccode.vhack.api.entities.console.ScannedTarget;
 import net.olympiccode.vhack.api.entities.console.TransferResult;
 import net.olympiccode.vhack.api.entities.impl.vHackAPIImpl;
@@ -8,13 +10,15 @@ import net.olympiccode.vhack.api.requests.Route;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+@Getter
+@Setter
 public class ScannedTargetImpl implements ScannedTarget {
 
-    int fw;
-    int av;
+    int firewall;
+    int antivirus;
     int spam;
     int sdk;
-    int ipsp;
+    int ipSpoof;
     long money;
     boolean anonymous;
     int winchance;
@@ -25,11 +29,11 @@ public class ScannedTargetImpl implements ScannedTarget {
     vHackAPIImpl api;
 
     public ScannedTargetImpl(vHackAPIImpl api, int fw, int av, int spam, int sdk, int ipsp, long money, boolean anonymous, int winchance, int spyware, String username, int eloonwin, String ip) {
-      this.fw = fw;
-      this.av = av;
+      this.firewall = fw;
+      this.antivirus = av;
       this.spam = spam;
       this.sdk = sdk;
-      this.ipsp = ipsp;
+      this.ipSpoof = ipsp;
       this.money = money;
       this.anonymous = anonymous;
       this.winchance = winchance;
@@ -40,57 +44,12 @@ public class ScannedTargetImpl implements ScannedTarget {
       this.api = api;
     }
 
-    public int getFw() {
-        return fw;
-    }
-
-    public int getAv() {
-        return av;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public int getEloonwin() {
-        return eloonwin;
-    }
-
-    public int getIpsp() {
-        return ipsp;
-    }
-
-    public long getMoney() {
-        return money;
-    }
-
-    public int getSdk() {
-        return sdk;
-    }
-
-    public int getSpam() {
-        return spam;
-    }
-
-    public int getSpyware() {
-        return spyware;
-    }
-
-    public int getWinchance() {
-        return winchance;
-    }
-
-    public boolean isAnonymous() {
-        return anonymous;
-    }
-
     public TransferResult transfer() {
         Route.CompiledRoute r = Route.Console.TR_TRANSFER.compile(api, ip);
         Response a = api.getRequester().getResponse(r);
-        System.out.println(a.getString());
         int result = -1;
-        int amount = -1;
-        int elo = -1;
+        int amount = 0;
+        int elo = 0;
         int eloch = -1;
         long newmoney = -1;
         try {
@@ -110,9 +69,20 @@ public class ScannedTargetImpl implements ScannedTarget {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        if (newmoney > 0) {
+           api.user.setMoney(newmoney);
+        }
+        if (elo > 0) {
+            api.user.setReputation(elo);
+        }
         return new TransferResultImpl(result, elo, eloch, amount, newmoney);
     }
 
+    public boolean uploadSpyware() {
+        Route.CompiledRoute r = Route.Console.SPYWARE_UPLOAD.compile(api, ip);
+        Response a = api.getRequester().getResponse(r);
+        return a.getString().equals("0");
+    }
 
 
 

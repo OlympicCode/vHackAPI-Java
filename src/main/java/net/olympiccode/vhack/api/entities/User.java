@@ -1,5 +1,8 @@
 package net.olympiccode.vhack.api.entities;
 
+
+import net.olympiccode.vhack.api.entities.tasks.TaskType;
+
 public interface User {
    long getMoney();
    int getPackages();
@@ -14,4 +17,7 @@ public interface User {
    int getReputation();
    int getNetcoins();
    int getBoosters();
+   int getStat(TaskType t);
+
+   int getFirewall();
 }

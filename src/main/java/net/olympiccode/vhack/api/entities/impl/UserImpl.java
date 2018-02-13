@@ -1,15 +1,20 @@
 package net.olympiccode.vhack.api.entities.impl;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.olympiccode.vhack.api.entities.User;
+import net.olympiccode.vhack.api.entities.tasks.TaskType;
 import net.olympiccode.vhack.api.events.NewMailEvent;
 import net.olympiccode.vhack.api.vHackAPI;
 
+@Getter
+@Setter
 public class UserImpl implements User {
     private vHackAPIImpl api;
     private long money;
     private int packages;
-    private String ip;
-    private int goldpackages;
+    private String IP;
+    private int goldPackages;
     private int unreadMail;
     private int score;
     private int rank;
@@ -20,28 +25,11 @@ public class UserImpl implements User {
     private int netcoins;
     private int boosters;
 
+    private int internet;
+    private int firewall;
+
     public UserImpl(vHackAPI api) {
         this.api = (vHackAPIImpl) api;
-    }
-
-    public long getMoney() {
-        return money;
-    }
-
-    public void setMoney(long money) {
-        this.money = money;
-    }
-
-    public int getGoldPackages() {
-        return goldpackages;
-    }
-
-    public void setGoldPackages(int goldpackages) {
-        this.goldpackages = goldpackages;
-    }
-
-    public int getUnreadMail() {
-        return unreadMail;
     }
 
     public void setUnreadMail(int unreadMail) {
@@ -51,83 +39,34 @@ public class UserImpl implements User {
         }
     }
 
-    public int getPackages() {
-        return packages;
+    public int getStat(TaskType t) {
+        switch (t.getId()) {
+            case "fw":
+                return firewall;
+           /* case "av":
+                return TaskType.ANTIVIRUS;
+            case "sdk":
+                return TaskType.SDK;
+            case "ipsp":
+                return TaskType.IPSPOOF;
+            case "spam":
+                return TaskType.SPAM;
+            case "scan":
+                return TaskType.SCAN;
+            case "adw":
+                return TaskType.SPYWARE;
+            case "cpu":
+                return TaskType.CPU;
+            case "ram":
+                return TaskType.RAM;
+            case "hdd":
+                return TaskType.HDD;*/
+            case "inet":
+                return internet;
+            default:
+                throw new RuntimeException("Invalid task type");
+        }
     }
 
-    public void setPackages(int packages) {
-        this.packages = packages;
-    }
 
-    public String getIP() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public int getRank() {
-        return rank;
-    }
-
-    public void setRank(int rank) {
-        this.rank = rank;
-    }
-
-    public int getActiveSpyware() {
-        return activeSpyware;
-    }
-
-    public void setActiveSpyware(int activeSpyware) {
-        this.activeSpyware = activeSpyware;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public int getReputation() {
-        return reputation;
-    }
-
-    public void setReputation(int reputation) {
-        this.reputation = reputation;
-    }
-
-    public int getNetcoins() {
-        return netcoins;
-    }
-
-    public void setNetcoins(int netcoins) {
-        this.netcoins = netcoins;
-    }
-
-    public int getBoosters() {
-        return boosters;
-    }
-
-    public void setBoosters(int boosters) {
-        this.boosters = boosters;
-    }
 }
