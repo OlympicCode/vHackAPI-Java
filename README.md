@@ -9,7 +9,7 @@
 - [x] Base request system
 - [x] Basic status retrieving
 - [x] Searching, scanning & attacking
-- [ ] Upgrading and task management
+- [x] Upgrading and task management
 - [ ] Cluster joining, managing & attacking
 - [ ] Notepad IP and text management
 - [ ] Botnet building and career management
